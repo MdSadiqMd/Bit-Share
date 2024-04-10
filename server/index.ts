@@ -42,8 +42,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use('/auth',authRoutes);
-app.use('/file',fileShareRoutes);
+app.use("/auth", authRoutes);
+app.use("/file", fileShareRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Running");
