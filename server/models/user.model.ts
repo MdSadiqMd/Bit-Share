@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema(
     password: { required: true, type: String },
     profilePicture: {
       type: String,
-      default: "",
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREl1TQtDYX5h2D_zEWAcR7uZge3w8w-BVjd-4QqFc4ZncS05EcIP7oVgvJWHY7ETxPp8Y&usqp=CAU",
     },
     file: {
       type: [fileSchema],
@@ -31,7 +32,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = await bcrypt.hash(user.password, process.env.TOKEN_SECRET);
   }
   next();
 });
