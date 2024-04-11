@@ -5,6 +5,8 @@ import { Server as SocketIOServer } from "socket.io";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 const socketIO = require("socket.io");
 const authRoutes = require("./routes/auth.routes");
 const fileShareRoutes = require("./routes/fileShare.routes");
@@ -21,6 +23,8 @@ export {
   cors,
   bodyParser,
   cookieParser,
+  mongoose,
+  bcrypt,
   authRoutes,
   fileShareRoutes,
 };
