@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 const socketIO = require("socket.io");
 const authRoutes = require("./routes/auth.routes");
 const fileShareRoutes = require("./routes/fileShare.routes");
@@ -28,6 +29,7 @@ export {
   cookieParser,
   mongoose,
   bcrypt,
+  jwt,
   authRoutes,
   fileShareRoutes,
   userModel,
