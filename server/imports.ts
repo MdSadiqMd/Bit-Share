@@ -10,6 +10,8 @@ import bcrypt from "bcrypt";
 const socketIO = require("socket.io");
 const authRoutes = require("./routes/auth.routes");
 const fileShareRoutes = require("./routes/fileShare.routes");
+const userModel = require("./models/user.model");
+const verificationModel = require("./models/verification.model");
 
 export {
   express,
@@ -27,4 +29,6 @@ export {
   bcrypt,
   authRoutes,
   fileShareRoutes,
+  userModel,
+  verificationModel,
 };
