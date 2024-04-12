@@ -12,8 +12,6 @@ import {
   cookieParser,
   authRoutes,
   fileShareRoutes,
-  userModel,
-  verificationModel,
 } from "./imports";
 
 interface CustomCookieOptions extends cookieParser.CookieParseOptions {

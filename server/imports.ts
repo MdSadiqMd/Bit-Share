@@ -1,4 +1,3 @@
-import { link } from "fs";
 import express, { Application, Request, Response, NextFunction } from "express";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
@@ -8,6 +7,8 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
+import multer from 'multer';
+import nodemailer from 'nodemailer';
 const socketIO = require("socket.io");
 const authRoutes = require("./routes/auth.routes");
 const fileShareRoutes = require("./routes/fileShare.routes");
@@ -30,6 +31,8 @@ export {
   mongoose,
   bcrypt,
   jwt,
+  multer,
+  nodemailer,
   authRoutes,
   fileShareRoutes,
   userModel,
