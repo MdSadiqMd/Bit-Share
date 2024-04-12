@@ -12,7 +12,12 @@ import {
   cookieParser,
   authRoutes,
   fileShareRoutes,
+  userModel,
+  verificationModel,
+  connectDB,
 } from "./imports";
+
+connectDB();
 
 const PORT: number = 8000;
 const app: Application = express();
