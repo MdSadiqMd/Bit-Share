@@ -11,10 +11,13 @@ const verificationSchema = new mongoose.Schema(
 verificationSchema.pre("save", async function (next) {
   const verification = this;
   if (verification.isModified("code")) {
-    verification.code = await bcrypt.hash(
-      verification.code,
-      process.env.TOKEN_SECRET
-    );
+    const tokenSecret = process.env.TOKEN_SECRET;
+    if (tokenSecret) {
+      const hashedCode = await bcrypt.hash(verification.code, tokenSecret);
+      verification.code = hashedCode;
+    } else {
+      throw new Error("TOKEN_SECRET is not defined.");
+    }
   }
   next();
 });

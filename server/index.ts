@@ -14,10 +14,11 @@ import {
   fileShareRoutes,
   userModel,
   verificationModel,
-  connectDB,
 } from "./imports";
 
-connectDB();
+interface CustomCookieOptions extends cookieParser.CookieParseOptions {
+  httpOnly?: boolean;
+}
 
 const PORT: number = 8000;
 const app: Application = express();
@@ -39,7 +40,15 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(
+  cookieParser(process.env.TOKEN_SECRET,{
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    signed: true,
+  } as CustomCookieOptions)
+);
 app.use("/public", express.static("public"));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -47,8 +56,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use("/auth", authRoutes);
-app.use("/file", fileShareRoutes);
+//app.use("/auth", authRoutes);
+//app.use("/file", fileShareRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Running");

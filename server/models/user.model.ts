@@ -32,7 +32,12 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, process.env.TOKEN_SECRET);
+    const tokenSecret = process.env.TOKEN_SECRET;
+    if (tokenSecret) {
+      user.password = await bcrypt.hash(user.password, tokenSecret);
+    } else {
+      throw new Error("TOKEN_SECRET is not defined.");
+    }
   }
   next();
 });
