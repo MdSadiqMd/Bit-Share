@@ -23,6 +23,7 @@ const fileShareRoutes = require("./routes/fileShare.routes");
 const userModel = require("./models/user.model");
 const verificationModel = require("./models/verification.model");
 import connectDB from "./db/db";
+import response from './utils/responseFunction';
 
 export {
   express,
@@ -49,4 +50,5 @@ export {
   userModel,
   verificationModel,
   connectDB,
+  response,
 };
