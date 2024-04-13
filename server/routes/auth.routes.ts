@@ -1,5 +1,7 @@
 import {
   express,
+  Request,
+  Response,
   NextFunction,
   Router,
   userModel,
@@ -11,7 +13,11 @@ import {
   nodemailer,
   Transporter,
   response,
+  connectDB,
 } from "../imports";
+
+const app = express();
+app.use(express.json());
 
 async function mailer(receiverEmail: string, code: number): Promise<void> {
   let transporter: Transporter = nodemailer.createTransport({
@@ -72,6 +78,29 @@ const router = express.Router();
 router.get("/test", (req, res) => {
   res.send("Auth Routes Testing");
   //mailer("mohammadsadiq4930@gmail.com", 12345);
+});
+
+router.post("/sendotp", async (req: Request, res: Response) => {
+  const { email } = req.body;
+  console.log(req.body);
+
+  if (!email) {
+    return response(res, 400, "Email is Required", null, false);
+  }
+  try {
+    const code = Math.floor(100000 + Math.random() * 900000);
+    await mailer(email, code);
+    await verificationModel.findOneAndDelete({ email: email });
+    const newVerification = new verificationModel({
+      email: email,
+      code: code,
+    });
+    await newVerification.save();
+    return response(res, 200, "OTP Sent Successfully", null, true);
+  } catch (error) {
+    console.log(error);
+    return response(res, 500, "Internal Server Error", null, false);
+  }
 });
 
 module.exports = router;

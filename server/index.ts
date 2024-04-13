@@ -28,6 +28,7 @@ const server: http.Server = http.createServer(app);
 const io: SocketIOServer = socketIO(server);
 
 const allowOrigins: string[] = ["http://localhost:3000"];
+app.use(express.json());
 app.use(
   cors({
     origin: function (origin, callback) {
