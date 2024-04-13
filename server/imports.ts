@@ -8,8 +8,9 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
-import nodemailer from 'nodemailer';
+import fs from 'fs';
 const socketIO = require("socket.io");
+const nodemailer=require('nodemailer');
 const authRoutes = require("./routes/auth.routes");
 const fileShareRoutes = require("./routes/fileShare.routes");
 const userModel = require("./models/user.model");
@@ -33,6 +34,7 @@ export {
   jwt,
   multer,
   nodemailer,
+  fs,
   authRoutes,
   fileShareRoutes,
   userModel,
