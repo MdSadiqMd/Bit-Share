@@ -1,5 +1,6 @@
 import {
   express,
+  NextFunction,
   Router,
   userModel,
   verificationModel,
@@ -38,10 +39,18 @@ async function mailer(receiverEmail: string, code: number): Promise<void> {
 }
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (
+    req: any,
+    file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void
+  ) => {
     cb(null, "./public");
   },
-  filename: (req, file, cb) => {
+  filename: (
+    req: any,
+    file: Express.Multer.File,
+    cb: (error: Error | null, filename: string) => void
+  ) => {
     let fileType = file.mimetype.split("/")[1];
     console.log(req.headers.filename);
     cb(null, `${Date.now()}.${fileType}`);
@@ -49,10 +58,10 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-const fileUpload = (req, res, next) => {
-  upload.single("clientfile")(req, res, (err) => {
+const fileUpload = (req: any, res: any, next: NextFunction) => {
+  upload.single("clientfile")(req, res, (err: any) => {
     if (err) {
-      return
+      return response(res, 400, "file Upload Failed", null, false);
     }
     next();
   });
