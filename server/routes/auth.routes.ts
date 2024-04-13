@@ -1,5 +1,6 @@
 import {
   express,
+  Router,
   userModel,
   verificationModel,
   bcrypt,
@@ -7,25 +8,38 @@ import {
   fs,
   multer,
   nodemailer,
+  Transporter,
 } from "../imports";
 
-async function mailer(receiverEmail, code) {
-  let transporter = nodemailer.getTransporter({
+async function mailer(receiverEmail: string, code: number): Promise<void> {
+  let transporter: Transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
     secure: false,
     requireTLS: true,
     auth: {
-      user: process.env.GMAIL,
-      pass: process.env.GMAIL_APP_PASSWORD,
+      user: process.env.GMAIL || "",
+      pass: process.env.GMAIL_APP_PASSWORD || "",
     },
   });
-  let info=await transporter
+
+  let info = await transporter.sendMail({
+    from: "Bit Share",
+    to: receiverEmail,
+    subject: "OTP Verification",
+    text: "Verify your Account via OTP: " + code,
+    html: "<b>Verify your Account via OTP: " + code + "</b>",
+  });
+
+  console.log(info.messageId);
+  console.log(nodemailer.getTestMessageUrl(info));
 }
 
 const router = express.Router();
+
 router.get("/test", (req, res) => {
   res.send("Auth Routes Testing");
+  mailer("mohammadsadiq4930@gmail.com", 12345);
 });
 
-module.exports = router;
+export default router;
