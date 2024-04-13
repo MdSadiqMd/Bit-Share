@@ -16,6 +16,10 @@ import {
 
 interface CustomCookieOptions extends cookieParser.CookieParseOptions {
   httpOnly?: boolean;
+  secure?: boolean;
+  sameSite?: "strict" | "lax" | "none";
+  maxAge?: number;
+  signed?: boolean;
 }
 
 const PORT: number = 8000;
@@ -39,7 +43,7 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(
-  cookieParser(process.env.TOKEN_SECRET,{
+  cookieParser(process.env.TOKEN_SECRET, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
@@ -47,6 +51,7 @@ app.use(
     signed: true,
   } as CustomCookieOptions)
 );
+
 app.use("/public", express.static("public"));
 
 app.use((req: Request, res: Response, next: NextFunction) => {

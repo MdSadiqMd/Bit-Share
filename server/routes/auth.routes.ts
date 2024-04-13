@@ -17,14 +17,15 @@ async function mailer(receiverEmail: string, code: number): Promise<void> {
     port: 587,
     secure: false,
     requireTLS: true,
+    service:"gmail",
     auth: {
-      user: process.env.GMAIL || "",
-      pass: process.env.GMAIL_APP_PASSWORD || "",
+      user: "mohammadsadiq4950@gmail.com",
+      pass: "ozyx xzzz iovq ngmd",
     },
   });
 
   let info = await transporter.sendMail({
-    from: "Bit Share",
+    from: "Bit-Share",
     to: receiverEmail,
     subject: "OTP Verification",
     text: "Verify your Account via OTP: " + code,
@@ -42,4 +43,4 @@ router.get("/test", (req, res) => {
   mailer("mohammadsadiq4930@gmail.com", 12345);
 });
 
-export default router;
+module.exports = router;
