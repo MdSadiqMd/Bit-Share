@@ -1,3 +1,4 @@
+import { log } from "console";
 import {
   express,
   Request,
@@ -108,8 +109,61 @@ router.post("/sendotp", async (req: Request, res: Response) => {
 router.post(
   "/register",
   fileUpload,
-  async (req: any, res: any, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.file);
+    try {
+      const { name, email, password, otp } = req.body;
+      let user = await userModel.findOne({ email: email });
+      let verificationQueue = await verificationModel.findOne({ email: email });
+      if (user) {
+        if (req.file && req.file.path) {
+          fs.unlink(req.file.path, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("File Deleted Successfully");
+            }
+          });
+        }
+      }
+      if (!verificationQueue) {
+        if (req.file && req.file.path) {
+          fs.unlink(req.file.path, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("File Deleted Successfully");
+            }
+          });
+        }
+        return response(res, 400, "Please resend OTP", null, false);
+      }
+      const isMatch = await bcrypt.compare(otp, verificationQueue.code);
+      if (!isMatch) {
+        if (req.file && req.file.path) {
+          fs.unlink(req.file.path, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("File Deleted Successfully");
+            }
+          });
+        }
+        return response(res, 400, "Invalid OTP", null, false);
+      }
+      user = new userModel({
+        name: name,
+        email: email,
+        password: password,
+        profilePicture: req.file?.path,
+      });
+      await user.save();
+      await verificationModel.deleteOne({ email: email });
+      return response(res, 200, "User Registered Successfully", null, true);
+    } catch (error: any) {
+      console.log(error);
+      return response(res, 500, "Internal Server Error", null, false);
+    }
   }
 );
 
