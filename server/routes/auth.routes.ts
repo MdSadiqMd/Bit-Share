@@ -50,7 +50,7 @@ const storage = multer.diskStorage({
     file: Express.Multer.File,
     cb: (error: Error | null, destination: string) => void
   ) => {
-    cb(null, "./public");
+    cb(null, "./public"); // the file path should be same not the one in import statements
   },
   filename: (
     req: any,
@@ -75,13 +75,13 @@ const fileUpload = (req: any, res: any, next: NextFunction) => {
 
 const router = express.Router();
 
-router.get("/test", (req, res) => {
+/*router.get("/test", (req, res) => {
   res.send("Auth Routes Testing");
   //mailer("mohammadsadiq4930@gmail.com", 12345);
-});
+});*/
 
 // Check headers settings when testing with postman
-router.post("/sendotp", async (req: any, res: any) => {
+router.post("/sendotp", async (req: Request, res: Response) => {
   const { email } = req.body;
   console.log(req.body);
 
@@ -104,5 +104,13 @@ router.post("/sendotp", async (req: any, res: any) => {
     return response(res, 500, "Internal Server Error", null, false);
   }
 });
+
+router.post(
+  "/register",
+  fileUpload,
+  async (req: any, res: any, next: NextFunction) => {
+    console.log(req.file);
+  }
+);
 
 module.exports = router;
