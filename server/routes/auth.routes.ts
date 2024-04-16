@@ -80,7 +80,8 @@ router.get("/test", (req, res) => {
   //mailer("mohammadsadiq4930@gmail.com", 12345);
 });
 
-router.post("/sendotp", async (req: Request, res: Response) => {
+// Check headers settings when testing with postman
+router.post("/sendotp", async (req: any, res: any) => {
   const { email } = req.body;
   console.log(req.body);
 
@@ -88,6 +89,7 @@ router.post("/sendotp", async (req: Request, res: Response) => {
     return response(res, 400, "Email is Required", null, false);
   }
   try {
+    await verificationModel.deleteOne({ email: email });
     const code = Math.floor(100000 + Math.random() * 900000);
     await mailer(email, code);
     await verificationModel.findOneAndDelete({ email: email });
