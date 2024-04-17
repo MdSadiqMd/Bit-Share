@@ -13,10 +13,17 @@ import {
   nodemailer,
   Transporter,
   response,
-  authTokenHandler
+  authTokenHandler,
 } from "../imports";
 require("dotenv").config();
 
+interface CustomRequest extends Request {
+  userId?: string;
+  ok?: boolean;
+  message?: string;
+}
+
+const router = express.Router();
 const app = express();
 app.use(express.json());
 
@@ -73,8 +80,6 @@ const fileUpload = (req: any, res: any, next: NextFunction) => {
     next();
   });
 };
-
-const router = express.Router();
 
 /*router.get("/test", (req, res) => {
   res.send("Auth Routes Testing");
@@ -218,10 +223,10 @@ router.post(
   }
 );
 
-router.get(
+/*router.get(
   "/checklogin",
   authTokenHandler,
-  async (req: Request, res: Response, next) => {
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
     res.json({
       userId: req.userId,
       message: req.message,
@@ -233,7 +238,7 @@ router.get(
 router.post(
   "/logout",
   authTokenHandler,
-  async (req: Request, res: Response, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     res.clearCookie("authToken");
     res.clearCookie("refreshToken");
     res.json({
@@ -241,6 +246,6 @@ router.post(
       ok: true,
     });
   }
-);
+);*/
 
 module.exports = router;

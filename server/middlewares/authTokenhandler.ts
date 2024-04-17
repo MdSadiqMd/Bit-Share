@@ -6,7 +6,7 @@ interface CustomRequest extends Request {
   message?: string;
 }
 
-function authTokenHandler(
+async function authTokenHandler(
   req: CustomRequest,
   res: Response,
   next: NextFunction
