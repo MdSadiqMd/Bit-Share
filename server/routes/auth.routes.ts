@@ -165,47 +165,56 @@ router.post(
   }
 );
 
-router.post("/login", async (req: Request, res: Response, next) => {
-  try {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email: email });
-    if (!user) {
-      return response(res, 400, "Invalid Credentials", null, false);
+router.post(
+  "/login",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+      const user = await userModel.findOne({ email: email });
+      if (!user) {
+        return response(res, 400, "Invalid Credentials", null, false);
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return response(res, 400, "Invalid Credentials", null, false);
+      }
+      const jwtKey = process.env.JWT_SECRET_KEY;
+      if (!jwtKey) {
+        return response(res, 500, "JWT Secret Key is not defined", null, false);
+      }
+      const authToken = jwt.sign({ userId: user._id }, jwtKey, {
+        expiresIn: "1d",
+      });
+      const jwtRefresh = process.env.JWT_REFRESH_KEY;
+      if (!jwtRefresh) {
+        return response(
+          res,
+          500,
+          "JWT Refresh Key is not defined",
+          null,
+          false
+        );
+      }
+      const refreshToken = jwt.sign({ userId: user._id }, jwtRefresh, {
+        expiresIn: "1d",
+      });
+      res.cookie("authToken", authToken, { httpOnly: true });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      return response(
+        res,
+        200,
+        "Logged in Successfully",
+        {
+          authToken: authToken,
+          refreshToken: refreshToken,
+        },
+        true
+      );
+    } catch (error) {
+      console.log(error);
+      return response(res, 500, "Internal Server Error", null, false);
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return response(res, 400, "Invalid Credentials", null, false);
-    }
-    const jwtKey = process.env.JWT_SECRET_KEY;
-    if (!jwtKey) {
-      return response(res, 500, "JWT Secret Key is not defined", null, false);
-    }
-    const authToken = jwt.sign({ userId: user._id }, jwtKey, {
-      expiresIn: "1d",
-    });
-    const jwtRefresh = process.env.JWT_REFRESH_KEY;
-    if (!jwtRefresh) {
-      return response(res, 500, "JWT Refresh Key is not defined", null, false);
-    }
-    const refreshToken = jwt.sign({ userId: user._id }, jwtRefresh, {
-      expiresIn: "1d",
-    });
-    res.cookie("authToken", authToken, { httpOnly: true });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true });
-    return response(
-      res,
-      200,
-      "Logged in Successfully",
-      {
-        authToken: authToken,
-        refreshToken: refreshToken,
-      },
-      true
-    );
-  } catch (error) {
-    console.log(error);
-    return response(res, 500, "Internal Server Error", null, false);
   }
-});
+);
 
 module.exports = router;
