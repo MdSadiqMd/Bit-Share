@@ -1,13 +1,4 @@
-import {
-  express,
-  userModel,
-  verificationModel,
-  bcrypt,
-  jwt,
-  connectDB,
-} from "../imports";
-
-connectDB();
+import { express, userModel, verificationModel, bcrypt, jwt } from "../imports";
 
 const router = express.Router();
 router.get("/test", (req, res) => {

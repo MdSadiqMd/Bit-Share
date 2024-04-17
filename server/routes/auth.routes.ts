@@ -13,10 +13,7 @@ import {
   nodemailer,
   Transporter,
   response,
-  connectDB,
 } from "../imports";
-
-connectDB();
 
 const app = express();
 app.use(express.json());
