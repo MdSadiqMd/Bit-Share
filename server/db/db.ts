@@ -1,4 +1,5 @@
 import { mongoose } from "../imports";
+require("dotenv").config();
 
 let cachedConnection: mongoose.Connection | null = null;
 

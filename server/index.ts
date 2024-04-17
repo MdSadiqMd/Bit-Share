@@ -12,7 +12,10 @@ import {
   cookieParser,
   authRoutes,
   fileShareRoutes,
+  connectDB,
 } from "./imports";
+
+connectDB();
 
 interface CustomCookieOptions extends cookieParser.CookieParseOptions {
   httpOnly?: boolean;
