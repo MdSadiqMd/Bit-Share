@@ -13,6 +13,7 @@ import {
   nodemailer,
   Transporter,
   response,
+  authTokenHandler
 } from "../imports";
 require("dotenv").config();
 

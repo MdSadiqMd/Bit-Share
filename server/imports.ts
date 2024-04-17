@@ -12,7 +12,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { VerifyErrors } from "jsonwebtoken";
 import multer from "multer";
 import fs from "fs";
 const socketIO = require("socket.io");
@@ -23,7 +23,8 @@ const fileShareRoutes = require("./routes/fileShare.routes");
 const userModel = require("./models/user.model");
 const verificationModel = require("./models/verification.model");
 import connectDB from "./db/db";
-import response from './utils/responseFunction';
+import response from "./utils/responseFunction";
+import authTokenHandler from "./middlewares/authTokenhandler";
 
 export {
   express,
@@ -41,6 +42,7 @@ export {
   mongoose,
   bcrypt,
   jwt,
+  VerifyErrors,
   multer,
   nodemailer,
   Transporter,
@@ -51,4 +53,5 @@ export {
   verificationModel,
   connectDB,
   response,
+  authTokenHandler,
 };
