@@ -1,4 +1,5 @@
 import { mongoose, bcrypt } from "../imports";
+require("dotenv").config();
 
 const fileSchema = new mongoose.Schema(
   {
@@ -32,11 +33,9 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
-    const tokenSecret = process.env.TOKEN_SECRET;
-    if (tokenSecret) {
-      user.password = await bcrypt.hash(user.password, tokenSecret);
-    } else {
-      throw new Error("TOKEN_SECRET is not defined.");
+    const token = process.env.TOKEN_SECRET;
+    if (token != undefined) {
+      user.password = await bcrypt.hash(user.password, parseInt(token));
     }
   }
   next();

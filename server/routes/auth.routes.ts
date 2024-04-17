@@ -14,6 +14,7 @@ import {
   Transporter,
   response,
 } from "../imports";
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
@@ -39,7 +40,7 @@ async function mailer(receiverEmail: string, code: number): Promise<void> {
     html: "<b>Verify your Account via OTP: " + code + "</b>",
   });
 
-  console.log(info.messageId);
+  //console.log(info.messageId);
   console.log(nodemailer.getTestMessageUrl(info));
 }
 
@@ -83,7 +84,6 @@ const router = express.Router();
 router.post("/sendotp", async (req: Request, res: Response) => {
   const { email } = req.body;
   console.log(req.body);
-
   if (!email) {
     return response(res, 400, "Email is Required", null, false);
   }

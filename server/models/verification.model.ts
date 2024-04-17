@@ -1,4 +1,5 @@
 import { mongoose, bcrypt } from "../imports";
+require("dotenv").config();
 
 const verificationSchema = new mongoose.Schema(
   {
@@ -11,20 +12,9 @@ const verificationSchema = new mongoose.Schema(
 verificationSchema.pre("save", async function (next) {
   const verification = this;
   if (verification.isModified("code")) {
-    const tokenSecretEnv = process.env.TOKEN_SECRET;
-    if (tokenSecretEnv) {
-      const tokenSecret = parseInt(tokenSecretEnv);
-      if (!isNaN(tokenSecret)) {
-        const hashedCode = await bcrypt.hash(
-          verification.code,
-          tokenSecret.toString()
-        );
-        verification.code = hashedCode;
-      } else {
-        throw new Error("TOKEN_SECRET is not a valid number.");
-      }
-    } else {
-      throw new Error("TOKEN_SECRET is not defined.");
+    const token = process.env.TOKEN_SECRET;
+    if (token != undefined) {
+      verification.code = await bcrypt.hash(verification.code, parseInt(token));
     }
   }
   next();
