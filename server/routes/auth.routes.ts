@@ -217,4 +217,29 @@ router.post(
   }
 );
 
+router.get(
+  "/checklogin",
+  authTokenHandler,
+  async (req: Request, res: Response, next) => {
+    res.json({
+      userId: req.userId,
+      message: req.message,
+      ok: req.ok,
+    });
+  }
+);
+
+router.post(
+  "/logout",
+  authTokenHandler,
+  async (req: Request, res: Response, next) => {
+    res.clearCookie("authToken");
+    res.clearCookie("refreshToken");
+    res.json({
+      message: "Logged Out Successfully",
+      ok: true,
+    });
+  }
+);
+
 module.exports = router;
