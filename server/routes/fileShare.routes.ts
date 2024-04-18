@@ -14,6 +14,7 @@ import {
   Transporter,
   response,
   authTokenHandler,
+  errorHandler,
 } from "../imports";
 require("dotenv").config();
 
@@ -88,11 +89,70 @@ router.post(
   fileUpload,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      
+      const { senderEmail, receiverEmail, filename } = req.body;
+      console.log(req.body);
+      let sender = await userModel.findOne({ email: senderEmail });
+      let receiver = await userModel.findOne({ email: receiverEmail });
+      if (!sender) {
+        if (req.file && req.file?.path) {
+          fs.unlink(req.file?.path, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("File Deleted Successfully");
+            }
+          });
+        }
+        return response(
+          res,
+          400,
+          "You need to Login to Share the Files",
+          null,
+          false
+        );
+      }
+      if (!receiver) {
+        if (req.file && req.file?.path) {
+          fs.unlink(req.file?.path, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("File Deleted Successfully");
+            }
+          });
+        }
+        return response(
+          res,
+          400,
+          "The Receiver isn't Logged on Bit Share",
+          null,
+          false
+        );
+      }
+      sender.files.push({
+        senderEmail: senderEmail,
+        receiverEmail: receiverEmail,
+        fileURL: req.file?.path,
+        filename: filename,
+        sharedAt: Date.now(),
+      });
+      receiver.files.push({
+        senderEmail: senderEmail,
+        receiverEmail: receiverEmail,
+        fileURL: req.file?.path,
+        filename: filename,
+        sharedAt: Date.now(),
+      });
+      await sender.save();
+      await receiver.save();
+      await mailer(receiverEmail, senderEmail);
+      return response(res, 200, "File Shared Successfully", null, true);
     } catch (error) {
-      
+      next(error);
     }
   }
 );
+
+router.use(errorHandler);
 
 module.exports = router;
