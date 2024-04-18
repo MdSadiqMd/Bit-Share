@@ -6,7 +6,7 @@ interface CustomRequest extends Request {
   message?: string;
 }
 
-async function authTokenHandler(
+function authTokenHandler(
   req: CustomRequest,
   res: Response,
   next: NextFunction
@@ -72,4 +72,4 @@ async function authTokenHandler(
   }
 }
 
-export default authTokenHandler;
+module.exports = authTokenHandler;

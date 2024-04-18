@@ -23,7 +23,7 @@ interface CustomRequest extends Request {
   message?: string;
 }
 
-const router = express.Router();
+const router: Router = express.Router();
 const app = express();
 app.use(express.json());
 
