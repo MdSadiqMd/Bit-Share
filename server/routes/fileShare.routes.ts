@@ -85,7 +85,7 @@ router.get("/test", (req, res) => {
 
 router.post(
   "/sharefile",
-  authTokenHandler,
+ //authTokenHandler,
   fileUpload,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -148,11 +148,9 @@ router.post(
       await mailer(receiverEmail, senderEmail);
       return response(res, 200, "File Shared Successfully", null, true);
     } catch (error) {
-      next(error);
+      return response(res, 500, "Internal Server Error", null, false);
     }
   }
 );
-
-router.use(errorHandler);
 
 module.exports = router;
