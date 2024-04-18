@@ -223,7 +223,8 @@ router.post(
   }
 );
 
-/*router.get(
+/*
+router.get(
   "/checklogin",
   authTokenHandler,
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -246,6 +247,7 @@ router.post(
       ok: true,
     });
   }
-);*/
+);
+*/
 
 module.exports = router;
