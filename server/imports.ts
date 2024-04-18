@@ -23,6 +23,7 @@ const fileShareRoutes = require("./routes/fileShare.routes");
 const userModel = require("./models/user.model");
 const verificationModel = require("./models/verification.model");
 const authTokenHandler = require("./middlewares/authTokenhandler");
+const errorHandler = require("./middlewares/errorHandler");
 import connectDB from "./db/db";
 import response from "./utils/responseFunction";
 
@@ -52,6 +53,7 @@ export {
   userModel,
   verificationModel,
   authTokenHandler,
+  errorHandler,
   connectDB,
   response,
 };
