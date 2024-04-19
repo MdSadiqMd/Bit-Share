@@ -1,14 +1,13 @@
 "use client";
-
+import { Button } from "./button";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Button } from "./button";
 import Image from "next/image";
 import Link from "next/link";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const router = useRouter();
-  const [isLoggedIn, useIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
   const pathname = usePathname();
 
   const handleLogout = () => {};
@@ -113,7 +112,7 @@ const Navbar = () => {
               <svg
                 className="w-5 h-5"
                 aria-hidden="true"
-                xmlns="http://www.w3.org/40/svg"
+                xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 17 14"
               >
