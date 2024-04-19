@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export const Navbar: React.FC<{ search?: string }> = () => {
     <>
       <Disclosure
         as="nav"
-        className="bg-gray-150 dark:bg-gray-800 scrollbar-hide shadow transition hover:shadow-md z-40 m-5 ml-18 mr-18 rounded-2xl"
+        className="bg-gray-150 dark:bg-gray-950 scrollbar-hide shadow transition hover:shadow-md z-40 m-5 ml-18 mr-18 rounded-2xl"
       >
         {({ open }): React.JSX.Element => (
           <>
@@ -63,13 +63,9 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                   </div>
                   <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex flex-shrink-0 items-center">
-                      <img
-                        className="h-8 w-auto"
-                        src="/logo.svg"
-                        alt="Your Company"
-                      />
+                      <b>Bit Share</b>
                     </div>
-                    <div className="hidden sm:ml-6 sm:block">
+                    <div className="hidden sm:ml-80 sm:block">
                       <div className="flex space-x-4">
                         {navigation.map((item) => (
                           <a
