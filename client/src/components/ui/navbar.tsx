@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/toggleButton";
+import { Button } from "./button";
 
 export const initialNavigation = [
   { name: "Home", href: "/", current: false },
@@ -20,6 +21,7 @@ export function classNames(...classes: string[]) {
 
 export const Navbar: React.FC<{ search?: string }> = () => {
   const [navigation, setNavigation] = useState(initialNavigation);
+  const [handleAuthButtons, setHandleAuthButtons] = useState<Boolean>(true);
   const router = useRouter();
 
   const handleNavigationClick = (name: string) => {
@@ -29,6 +31,16 @@ export const Navbar: React.FC<{ search?: string }> = () => {
     }));
     setNavigation(updatedNavigation);
   };
+
+  useEffect(() => {
+    return () => {
+      if (window.innerWidth < 635) {
+        setHandleAuthButtons(false);
+      } else if (window.innerWidth > 660) {
+        setHandleAuthButtons(true);
+      }
+    };
+  }, []);
 
   const logout = async () => {};
 
@@ -87,7 +99,7 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                     </div>
                   </div>
 
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <div className="absolute space-x-5 inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <ModeToggle />
 
                     {/* Profile dropdown */}
@@ -98,7 +110,7 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREl1TQtDYX5h2D_zEWAcR7uZge3w8w-BVjd-4QqFc4ZncS05EcIP7oVgvJWHY7ETxPp8Y&usqp=CAU"
                             alt=""
                           />
                         </Menu.Button>
@@ -156,6 +168,15 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                         </Menu.Items>
                       </Transition>
                     </Menu>
+
+                    <div className="space-x-2 hidden sm:flex">
+                      <Button variant="secondary">
+                        <Link href="/login">Login</Link>
+                      </Button>
+                      <Button variant="secondary">
+                        <Link href="/signup">Signup</Link>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
