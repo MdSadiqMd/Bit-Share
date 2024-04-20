@@ -21,7 +21,6 @@ export function classNames(...classes: string[]) {
 
 export const Navbar: React.FC<{ search?: string }> = () => {
   const [navigation, setNavigation] = useState(initialNavigation);
-  const [handleAuthButtons, setHandleAuthButtons] = useState<Boolean>(true);
   const router = useRouter();
 
   const handleNavigationClick = (name: string) => {
@@ -31,16 +30,6 @@ export const Navbar: React.FC<{ search?: string }> = () => {
     }));
     setNavigation(updatedNavigation);
   };
-
-  useEffect(() => {
-    return () => {
-      if (window.innerWidth < 635) {
-        setHandleAuthButtons(false);
-      } else if (window.innerWidth > 660) {
-        setHandleAuthButtons(true);
-      }
-    };
-  }, []);
 
   const logout = async () => {};
 
