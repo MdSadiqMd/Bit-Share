@@ -11,10 +11,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 const loginPage = () => {
+  const [isLoading, useIsLoading] = useState<Boolean>(true);
+  const handleLoading = () => {
+    useIsLoading(!isLoading);
+  };
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm mt-[10%] items-center justify-center">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
@@ -22,7 +28,7 @@ const loginPage = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
+        <div className="grid gap-4 space-y-3">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -38,9 +44,20 @@ const loginPage = () => {
             </div>
             <Input id="password" type="password" required />
           </div>
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
+          {isLoading ? (
+            <Button
+              onClick={() => handleLoading()}
+              type="submit"
+              className="w-full"
+            >
+              Login
+            </Button>
+          ) : (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
+          )}
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
