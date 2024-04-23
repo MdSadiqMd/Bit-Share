@@ -69,9 +69,9 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                     <div className="hidden sm:ml-80 sm:block">
                       <div className="flex space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            href={`http://localhost:3000${item.href}`}
                             onClick={() => handleNavigationClick(item.name)}
                             className={classNames(
                               item.current
@@ -82,7 +82,7 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                             aria-current={item.current ? "page" : undefined}
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
