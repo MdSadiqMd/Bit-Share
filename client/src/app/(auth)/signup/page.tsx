@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { InputOTPForm } from "@/components/ui/otpForm";
 
 const signupForm = () => {
   const [isLoading, useIsLoading] = useState<Boolean>(true);
@@ -59,6 +60,9 @@ const signupForm = () => {
                 </Button>
               )}
             </div>
+          </div>
+          <div className="grid gap-2">
+            <InputOTPForm />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
