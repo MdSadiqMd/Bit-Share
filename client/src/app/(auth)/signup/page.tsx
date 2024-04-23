@@ -25,7 +25,7 @@ const signupForm = () => {
     useIsLoadingOTP(!isLoadingOTP);
   };
   return (
-    <Card className="mx-auto max-w-md mt-[7%]">
+    <Card className="mx-auto max-w-md mt-[1.5%]">
       <CardHeader>
         <CardTitle className="text-xl">Sign Up</CardTitle>
         <CardDescription>
