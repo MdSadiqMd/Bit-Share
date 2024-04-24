@@ -86,7 +86,7 @@ const share = () => {
               <button
                 type="submit"
                 className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                    font-semibold  hover:multi-['outline-none;shadow-outline'] hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+                                  font-semibold focus:multi-['outline-none;shadow-outline'] hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
               >
                 Upload
               </button>
