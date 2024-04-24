@@ -6,7 +6,9 @@ import Navbar from "@/components/ui/navbar";
 const share = () => {
   return (
     <>
-      <Navbar />
+      <div>
+        <Navbar />
+      </div>
       <div>
         <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
           <div className="absolute bg-white dark:bg-black opacity-60 inset-0 z-0"></div>
