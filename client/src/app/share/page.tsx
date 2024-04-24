@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import Navbar from "@/components/ui/navbar";
 
 const share = () => {
@@ -10,30 +11,30 @@ const share = () => {
         <Navbar />
       </div>
       <div>
-        <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
+        <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-7 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
           <div className="absolute bg-white dark:bg-black opacity-60 inset-0 z-0"></div>
           <div className="sm:max-w-lg w-full p-10 bg-white dark:bg-black rounded-xl z-10">
             <div className="text-center">
-              <h2 className="mt-5 text-3xl font-bold text-gray-900">
-                File Upload!
+              <h2 className="mt-5 text-3xl font-medium text-gray-900 dark:text-gray-200">
+                File Upload
               </h2>
-              <p className="mt-2 text-sm text-gray-400">
+              {/*<p className="mt-2 text-sm text-gray-400">
                 Lorem ipsum is placeholder text.
-              </p>
+              </p>*/}
             </div>
-            <form className="mt-8 space-y-3" action="#" method="POST">
+            <form className="mt-8 space-y-6" action="#" method="POST">
               <div className="grid grid-cols-1 space-y-2">
-                <label className="text-sm font-bold text-gray-500 tracking-wide">
+                <label className="text-md font-normal text-gray-900 dark:text-gray-200 tracking-wide">
                   Title
                 </label>
                 <input
-                  className="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                  className="text-base p-2 border text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:border-gray-500"
                   type=""
                   placeholder="youremail@gmail.com"
                 />
               </div>
               <div className="grid grid-cols-1 space-y-2">
-                <label className="text-sm font-bold text-gray-500 tracking-wide">
+                <label className="text-md font-normal text-gray-900 dark:text-gray-200 tracking-wide">
                   Attach Document
                 </label>
                 <div className="flex items-center justify-center w-full">
