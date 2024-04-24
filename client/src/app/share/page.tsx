@@ -7,10 +7,10 @@ const share = () => {
   return (
     <>
       <Navbar />
-      <div class="relative h-full w-full bg-slate-950relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
-        <div class="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]">
-          <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
-          <div className="sm:max-w-lg w-full p-10 bg-white rounded-xl z-10">
+      <div>
+        <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
+          <div className="absolute bg-white dark:bg-black opacity-60 inset-0 z-0"></div>
+          <div className="sm:max-w-lg w-full p-10 bg-white dark:bg-black rounded-xl z-10">
             <div className="text-center">
               <h2 className="mt-5 text-3xl font-bold text-gray-900">
                 File Upload!
@@ -45,9 +45,9 @@ const share = () => {
                         stroke="currentColor"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                         />
                       </svg>
@@ -63,7 +63,11 @@ const share = () => {
                       <p className="pointer-none text-gray-500 ">
                         <span className="text-sm">Drag and drop</span> files
                         here <br /> or{" "}
-                        <a href="" id="" class="text-blue-600 hover:underline">
+                        <a
+                          href=""
+                          id=""
+                          className="text-blue-600 hover:underline"
+                        >
                           select a file
                         </a>{" "}
                         from your computer
