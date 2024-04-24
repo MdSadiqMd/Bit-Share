@@ -10,7 +10,6 @@ const share = () => {
       <div>
         <Navbar />
       </div>
-      <div>
         <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-7 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
           <div className="absolute bg-white dark:bg-black opacity-60 inset-0 z-0"></div>
           <div className="sm:max-w-lg w-full p-10 bg-white dark:bg-black rounded-xl z-10">
@@ -95,7 +94,6 @@ const share = () => {
             </form>
           </div>
         </div>
-      </div>
     </>
   );
 };
