@@ -83,9 +83,10 @@ router.get("/test", (req, res) => {
   res.send("File Share Routes Testing");
 });
 
+// There is no Files in database inject it and test it
 router.post(
   "/sharefile",
- //authTokenHandler,
+  //authTokenHandler,
   fileUpload,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -133,7 +134,7 @@ router.post(
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         fileURL: req.file?.path,
-        filename: filename,
+        filename: filename ? filename : Date.now().toLocaleString(),
         sharedAt: Date.now(),
       });
       receiver.files.push({

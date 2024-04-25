@@ -2,7 +2,6 @@ import {
   express,
   Request,
   Response,
-  NextFunction,
   Router,
   userModel,
   verificationModel,
@@ -14,6 +13,7 @@ import {
   Transporter,
   response,
   authTokenHandler,
+  NextFunction,
 } from "../imports";
 require("dotenv").config();
 
@@ -116,7 +116,9 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.file);
     try {
-      const { name, email, password, otp } = req.body;
+      const { name, email, password, otp, clientfile } = req.body;
+      console.log({ name, email, password, otp, clientfile });
+      
       let user = await userModel.findOne({ email: email });
       let verificationQueue = await verificationModel.findOne({ email: email });
       if (user) {
@@ -160,6 +162,7 @@ router.post(
         email: email,
         password: password,
         profilePicture: req.file?.path,
+        files: clientfile,
       });
       await user.save();
       await verificationModel.deleteOne({ email: email });
@@ -223,10 +226,9 @@ router.post(
   }
 );
 
-/*
 router.get(
   "/checklogin",
-  authTokenHandler,
+  //authTokenHandler,
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     res.json({
       userId: req.userId,
@@ -238,7 +240,7 @@ router.get(
 
 router.post(
   "/logout",
-  authTokenHandler,
+  //authTokenHandler,
   async (req: Request, res: Response, next: NextFunction) => {
     res.clearCookie("authToken");
     res.clearCookie("refreshToken");
@@ -248,6 +250,5 @@ router.post(
     });
   }
 );
-*/
 
 module.exports = router;
