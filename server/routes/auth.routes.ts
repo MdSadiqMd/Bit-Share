@@ -118,7 +118,6 @@ router.post(
     try {
       const { name, email, password, otp, clientfile } = req.body;
       console.log({ name, email, password, otp, clientfile });
-      
       let user = await userModel.findOne({ email: email });
       let verificationQueue = await verificationModel.findOne({ email: email });
       if (user) {
