@@ -12,13 +12,40 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { logIn, logOut } from "@/redux/features/auth.slice";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 const loginPage = () => {
+  const router = useRouter();
+  const auth = useAppSelector((state) => state.authReducer);
+  const dispatch = useDispatch<AppDispatch>();
   const [isLoading, useIsLoading] = useState<Boolean>(true);
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const handleLoading = () => {
     useIsLoading(!isLoading);
   };
+
   return (
     <Card className="mx-auto max-w-sm mt-[10%] items-center justify-center">
       <CardHeader>
@@ -35,6 +62,8 @@ const loginPage = () => {
               id="email"
               type="email"
               placeholder="youremail@gmail.com"
+              value={formData.email}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -42,11 +71,20 @@ const loginPage = () => {
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
             </div>
-            <Input id="password" type="password" required />
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
           </div>
           {isLoading ? (
             <Button
-              onClick={() => handleLoading()}
+              onClick={() => {
+                handleLoading();
+                handleInputChange;
+              }}
               type="submit"
               className="w-full"
             >
