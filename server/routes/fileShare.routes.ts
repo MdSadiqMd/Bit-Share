@@ -71,7 +71,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const fileUpload = (req: any, res: any, next: NextFunction) => {
-  upload.single("clientfile")(req, res, (err: any) => {
+  upload.single("filename")(req, res, (err: any) => {
     if (err) {
       return response(res, 400, "file Upload Failed", null, false);
     }
@@ -83,7 +83,6 @@ router.get("/test", (req, res) => {
   res.send("File Share Routes Testing");
 });
 
-// There is no Files in database inject it and test it
 router.post(
   "/sharefile",
   //authTokenHandler,
@@ -134,14 +133,14 @@ router.post(
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         fileURL: req.file?.path,
-        filename: filename ? filename : Date.now().toLocaleString(),
+        fileName: filename ? filename : Date.now().toLocaleString(),
         sharedAt: Date.now(),
       });
       receiver.files.push({
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         fileURL: req.file?.path,
-        filename: filename,
+        fileName: filename ? filename : Date.now().toLocaleString(),
         sharedAt: Date.now(),
       });
       await sender.save();
@@ -149,6 +148,8 @@ router.post(
       await mailer(receiverEmail, senderEmail);
       return response(res, 200, "File Shared Successfully", null, true);
     } catch (error) {
+      console.log(error);
+
       return response(res, 500, "Internal Server Error", null, false);
     }
   }
