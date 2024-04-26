@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/toggleButton";
 import { Button } from "./button";
+import { usePathname } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { logIn, logOut } from "@/redux/features/auth.slice";
 
 export const initialNavigation = [
   { name: "Home", href: "/", current: false },
@@ -21,7 +25,55 @@ export function classNames(...classes: string[]) {
 
 export const Navbar: React.FC<{ search?: string }> = () => {
   const [navigation, setNavigation] = useState(initialNavigation);
+  const dispatch = useDispatch<AppDispatch>();
+  const auth = useAppSelector((state) => state.authReducer);
   const router = useRouter();
+
+  const checkLogin = async () => {
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/checklogin", {
+      method: "GET",
+      credentials: "include",
+    });
+    let data = await res.json();
+    if (!data.ok) {
+      dispatch(logOut());
+    } else {
+      getUserData();
+    }
+  };
+
+  React.useEffect(() => {
+    checkLogin();
+  }, []);
+
+  const getUserData = async () => {
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/getuser", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    let data = await res.json();
+    if (data.ok) {
+      dispatch(logIn(data.data));
+      router.push("/myfiles");
+    } else {
+      dispatch(logOut());
+    }
+  };
+
+  const handleLogout = async () => {
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    let data = await res.json();
+    if (data.ok) {
+      dispatch(logOut());
+      router.push("/login");
+    }
+  };
 
   const handleNavigationClick = (name: string) => {
     const updatedNavigation = initialNavigation.map((item) => ({
@@ -30,8 +82,6 @@ export const Navbar: React.FC<{ search?: string }> = () => {
     }));
     setNavigation(updatedNavigation);
   };
-
-  const logout = async () => {};
 
   return (
     <>
@@ -148,7 +198,7 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                                   active ? "bg-gray-300 dark:bg-gray-800" : "",
                                   "block px-4 py-2 text-sm text-gray-800 dark:text-gray-300"
                                 )}
-                                onClick={() => logout()}
+                                onClick={() => handleLogout()}
                               >
                                 Sign out
                               </Link>
@@ -158,14 +208,20 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                       </Transition>
                     </Menu>
 
-                    <div className="space-x-2 hidden sm:flex">
-                      <Button variant="secondary">
-                        <Link href="/login">Login</Link>
-                      </Button>
-                      <Button variant="secondary">
-                        <Link href="/signup">Signup</Link>
-                      </Button>
-                    </div>
+                    {auth.isAuth ? (
+                      <div className="hidden sm:flex">
+                        <Button onClick={() => handleLogout()}>LogOut</Button>
+                      </div>
+                    ) : (
+                      <div className="space-x-2 hidden sm:flex">
+                        <Button variant="secondary">
+                          <Link href="/login">Login</Link>
+                        </Button>
+                        <Button variant="secondary">
+                          <Link href="/signup">Signup</Link>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
