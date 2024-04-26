@@ -42,6 +42,51 @@ const loginPage = () => {
     });
   };
 
+  const handleLogin = async () => {
+    if (formData.email == "" || formData.password == "") {
+      toast.error("Please fill all the fields");
+      return;
+    }
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      credentials: "include",
+    });
+
+    let data = await res.json();
+    if (data.ok) {
+      toast.success("Login Success");
+      getUserData();
+    } else {
+      toast.error(data.message);
+    }
+  };
+
+  const getUserData = async () => {
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/getuser", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      credentials: "include",
+    });
+    let data = await res.json();
+    if (data.ok) {
+      dispatch(logIn(data.data));
+      router.push("/myfiles");
+    } else {
+      dispatch(logOut());
+    }
+  };
+
   const handleLoading = () => {
     useIsLoading(!isLoading);
   };
@@ -83,7 +128,7 @@ const loginPage = () => {
             <Button
               onClick={() => {
                 handleLoading();
-                handleInputChange;
+                handleLogin;
               }}
               type="submit"
               className="w-full"
