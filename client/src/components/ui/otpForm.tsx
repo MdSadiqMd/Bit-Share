@@ -1,10 +1,9 @@
 "use client";
 
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -22,21 +21,28 @@ import {
 } from "@/components/ui/input-otp";
 import { toast } from "@/components/ui/use-toast";
 
+interface InputOTPFormProps {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
 const FormSchema = z.object({
   pin: z.string().min(6, {
     message: "Your one-time password must be 6 characters.",
   }),
 });
 
-export function InputOTPForm() {
-  const form = useForm<z.infer<typeof FormSchema>>({
+export function InputOTPForm({ value, onChange }: InputOTPFormProps) {
+  const form = useForm<{
+    pin: string;
+  }>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      pin: "",
+      pin: value,
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: { pin: string }) {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -57,18 +63,17 @@ export function InputOTPForm() {
             <FormItem>
               <FormLabel>One-Time Password</FormLabel>
               <FormControl>
-                <InputOTP maxLength={6} {...field}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSeparator />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSeparator />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
+                <InputOTP maxLength={6} {...field} onChange={onChange} />
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSeparator />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  <InputOTPSeparator />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
               </FormControl>
               <FormDescription>
                 Please enter the one-time password sent to your email.

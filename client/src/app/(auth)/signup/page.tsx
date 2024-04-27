@@ -80,7 +80,8 @@ const signupForm = () => {
         <div className="grid gap-4 space-y-2">
           <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Enter your name" required />
+            <Input id="name" placeholder="Enter your name"value={formData.name}
+                onChange={handleInputChange} required />
           </div>
           <div className="grid grid-cols-3 gap-3 items-center">
             <div className="col-span-2 grid gap-2">
@@ -96,7 +97,7 @@ const signupForm = () => {
             </div>
             <div className="col-span-1 flex mt-6 items-center justify-center">
               {isLoadingOTP ? (
-                <Button onClick={() => handleLoadingOTP()} className="w-30">
+                <Button onClick={() => {handleLoadingOTP(),sendOTP}} className="w-30">
                   Send OTP
                 </Button>
               ) : (
@@ -108,7 +109,7 @@ const signupForm = () => {
             </div>
           </div>
           <div className="grid gap-2">
-            <InputOTPForm />
+            <InputOTPForm value={otp} onChange={(e:any)=>setOtp(e?.target?.value)} />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
