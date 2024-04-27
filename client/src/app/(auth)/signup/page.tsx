@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,15 +17,57 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { InputOTPForm } from "@/components/ui/otpForm";
 
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const signupForm = () => {
+  const Router = useRouter();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [otp, setOtp] = useState("");
+  const [sendingOtp, setSendingOtp] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    password: "",
+  } as FormData);
   const [isLoading, useIsLoading] = useState<Boolean>(true);
   const [isLoadingOTP, useIsLoadingOTP] = useState<Boolean>(true);
+
   const handleLoading = () => {
     useIsLoading(!isLoading);
   };
+
   const handleLoadingOTP = () => {
     useIsLoadingOTP(!isLoadingOTP);
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const sendOTP = async () => {
+    setSendingOtp(true);
+    let res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/sendotp", {
+      method: "POST",
+      body: JSON.stringify({ email: formData.email }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    let data = await res.json();
+    setSendingOtp(false);
+    if (data.ok) {
+      toast.success("OTP sent");
+    } else {
+      toast.error(data.message);
+    }
+  };
+
   return (
     <Card className="mx-auto max-w-md mt-[1.5%]">
       <CardHeader>
@@ -45,6 +89,8 @@ const signupForm = () => {
                 id="email"
                 type="email"
                 placeholder="youremail@gmail.com"
+                value={formData.email}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -66,11 +112,12 @@ const signupForm = () => {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
+            <Input id="password" type="password" value={formData.password}
+                onChange={handleInputChange}/>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="image">Your Profile Pic</Label>
-            <Input id="image" type="file" />
+            <Input id="image" type="file"/>
           </div>
           {isLoading ? (
             <Button
