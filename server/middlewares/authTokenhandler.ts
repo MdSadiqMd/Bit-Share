@@ -72,4 +72,4 @@ function authTokenHandler(
   }
 }
 
-module.exports = authTokenHandler;
+export default authTokenHandler;

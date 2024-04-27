@@ -239,7 +239,7 @@ router.get(
 
 router.post(
   "/logout",
-  //authTokenHandler,
+  authTokenHandler,
   async (req: Request, res: Response, next: NextFunction) => {
     res.clearCookie("authToken");
     res.clearCookie("refreshToken");
@@ -263,4 +263,4 @@ router.get("/getuser", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

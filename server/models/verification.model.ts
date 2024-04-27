@@ -20,6 +20,7 @@ verificationSchema.pre("save", async function (next) {
   next();
 });
 
-module.exports =
+const verificationModel =
   mongoose.models["verifications"] ||
   mongoose.model("verifications", verificationSchema);
+export default verificationModel;
