@@ -108,7 +108,7 @@ const loginPage = () => {
               type="email"
               placeholder="youremail@gmail.com"
               value={formData.email}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e)}
               required
             />
           </div>
@@ -120,15 +120,16 @@ const loginPage = () => {
               id="password"
               type="password"
               value={formData.password}
-              onChange={handleInputChange}
-              required
+              onChange={(e: any) => {
+                handleInputChange(e);
+              }}
             />
           </div>
           {isLoading ? (
             <Button
               onClick={() => {
                 handleLoading();
-                handleLogin;
+                handleLogin();
               }}
               type="submit"
               className="w-full"
