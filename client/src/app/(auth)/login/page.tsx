@@ -28,7 +28,7 @@ const loginPage = () => {
   const router = useRouter();
   const auth = useAppSelector((state) => state.authReducer);
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, useIsLoading] = useState<Boolean>(true);
+
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -59,10 +59,15 @@ const loginPage = () => {
       },
       credentials: "include",
     });
-
     let data = await res.json();
+    console.log(data);
+    
     if (data.ok) {
+      // console.log(data.data)
+      // localStorage.setItem('authToken', data.data.authToken)
+      // localStorage.setItem('refreshToken', data.data.refreshToken)
       toast.success("Login Success");
+      router.push('/share')
       getUserData();
     } else {
       toast.error(data.message);
@@ -87,10 +92,6 @@ const loginPage = () => {
     }
   };
 
-  const handleLoading = () => {
-    useIsLoading(!isLoading);
-  };
-
   return (
     <Card className="mx-auto max-w-sm mt-[10%] items-center justify-center">
       <CardHeader>
@@ -105,10 +106,11 @@ const loginPage = () => {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="youremail@gmail.com"
               value={formData.email}
-              onChange={(e) => handleInputChange(e)}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -118,30 +120,15 @@ const loginPage = () => {
             </div>
             <Input
               id="password"
+              name="password"
               type="password"
               value={formData.password}
-              onChange={(e: any) => {
-                handleInputChange(e);
-              }}
+              onChange={handleInputChange}
             />
           </div>
-          {isLoading ? (
-            <Button
-              onClick={() => {
-                handleLoading();
-                handleLogin();
-              }}
-              type="submit"
-              className="w-full"
-            >
-              Login
-            </Button>
-          ) : (
-            <Button disabled>
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
-            </Button>
-          )}
+          <Button onClick={handleLogin} type="submit" className="w-full">
+            Login
+          </Button>
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}

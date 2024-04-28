@@ -124,7 +124,12 @@ const signupForm = () => {
         <div className="grid gap-4 space-y-2">
           <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Enter your name" required />
+            <Input
+              id="name"
+              placeholder="Enter your name"
+              onChange={handleInputChange}
+              required
+            />
           </div>
           <div className="grid grid-cols-3 gap-3 items-center">
             <div className="col-span-2 grid gap-2">
@@ -133,12 +138,18 @@ const signupForm = () => {
                 id="email"
                 type="email"
                 placeholder="youremail@gmail.com"
+                onChange={handleInputChange}
                 required
               />
             </div>
             <div className="col-span-1 flex mt-6 items-center justify-center">
-              {sendingOtp ? (
-                <Button onClick={() => handleLoadingOTP()} className="w-30">
+              {!sendingOtp ? (
+                <Button
+                  onClick={() => {
+                    sendOTP
+                  }}
+                  className="w-30"
+                >
                   Send OTP
                 </Button>
               ) : (
@@ -151,15 +162,26 @@ const signupForm = () => {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
+            <Input
+              id="password"
+              type="password"
+              onChange={handleInputChange}
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="image">Your Profile Pic</Label>
-            <Input id="image" type="file" />
+            <Input
+              id="image"
+              type="file"
+              onChange={(e) => setImageFile(e.target.files![0])}
+            />
           </div>
           {isLoading ? (
             <Button
-              onClick={() => handleLoading()}
+              onClick={() => {
+                handleLoading();
+                handleSignup;
+              }}
               type="submit"
               className="w-full"
             >
