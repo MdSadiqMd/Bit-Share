@@ -12,9 +12,9 @@ import {
   nodemailer,
   Transporter,
   response,
-  authTokenHandler,
   NextFunction,
 } from "../imports";
+import authTokenHandler from "../middlewares/authTokenhandler";
 require("dotenv").config();
 
 interface CustomRequest extends Request {
@@ -227,7 +227,7 @@ router.post(
 
 router.get(
   "/checklogin",
-  //authTokenHandler,
+  authTokenHandler,
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     res.json({
       userId: req.userId,

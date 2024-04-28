@@ -21,7 +21,6 @@ import authRoutes from "./routes/auth.routes";
 import fileShareRoutes from "./routes/fileShare.routes";
 import userModel from "./models/user.model";
 import verificationModel from "./models/verification.model";
-import authTokenHandler from "./middlewares/authTokenhandler";
 import errorHandler from "./middlewares/errorHandler";
 import connectDB from "./db/db";
 import response from "./utils/responseFunction";
@@ -51,7 +50,6 @@ export {
   fileShareRoutes,
   userModel,
   verificationModel,
-  authTokenHandler,
   errorHandler,
   connectDB,
   response,

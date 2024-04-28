@@ -13,9 +13,9 @@ import {
   nodemailer,
   Transporter,
   response,
-  authTokenHandler,
   errorHandler,
 } from "../imports";
+import authTokenHandler from "../middlewares/authTokenhandler";
 require("dotenv").config();
 
 const router: Router = express.Router();
@@ -85,7 +85,7 @@ router.get("/test", (req, res) => {
 
 router.post(
   "/sharefile",
-  //authTokenHandler,
+  authTokenHandler,
   fileUpload,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
