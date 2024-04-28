@@ -126,6 +126,7 @@ const signupForm = () => {
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
+              name="name"
               placeholder="Enter your name"
               onChange={handleInputChange}
               required
@@ -136,6 +137,7 @@ const signupForm = () => {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="youremail@gmail.com"
                 onChange={handleInputChange}
@@ -146,7 +148,7 @@ const signupForm = () => {
               {!sendingOtp ? (
                 <Button
                   onClick={() => {
-                    sendOTP
+                    sendOTP;
                   }}
                   className="w-30"
                 >
@@ -160,21 +162,36 @@ const signupForm = () => {
               )}
             </div>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="image">Your Profile Pic</Label>
-            <Input
-              id="image"
-              type="file"
-              onChange={(e) => setImageFile(e.target.files![0])}
-            />
+          <div>
+            {/*
+            <div>
+              <div className="grid gap-2">
+                <InputOTPForm
+                  value={otp}
+                  onChange={(e: any) => setOtp(e?.target?.value)}
+                />
+              </div>
+            </div>
+            */}
+            <div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="image">Your Profile Pic</Label>
+                <Input
+                  id="image"
+                  type="file"
+                  onChange={(e) => setImageFile(e.target.files![0])}
+                />
+              </div>
+            </div>
           </div>
           {isLoading ? (
             <Button
