@@ -1,10 +1,41 @@
 "use client";
 
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import Image from "next/image";
+import { useDropzone } from "react-dropzone";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { io } from "socket.io-client";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/ui/navbar";
 
+let socket: any = null;
+let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`;
+
 const share = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const auth = useAppSelector((state) => state.authReducer)
+  const [file, setFile] = useState<any>(null)
+  const [email, setEmail] = useState('')
+  const [fileName, setFileName] = useState('')
+
+  const onDrop = useCallback((acceptedFiles: any) => {
+    console.log(acceptedFiles)
+    setFile(acceptedFiles[0])
+  }, [])
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
+  const removeFile = () => {
+    setFile(null)
+  }
+  const viewFile = () => { }
+
+  const [uploading, setUploading] = useState(false)
+  const [uploadpercent, setUploadpercent] = useState(0)
+
+  const Router = useRouter()
   return (
     <>
       <div>
