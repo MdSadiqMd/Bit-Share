@@ -61,13 +61,13 @@ const loginPage = () => {
     });
     let data = await res.json();
     console.log(data);
-    
+
     if (data.ok) {
       // console.log(data.data)
       // localStorage.setItem('authToken', data.data.authToken)
       // localStorage.setItem('refreshToken', data.data.refreshToken)
       toast.success("Login Success");
-      router.push('/share')
+      router.push("/share");
       getUserData();
     } else {
       toast.error(data.message);
