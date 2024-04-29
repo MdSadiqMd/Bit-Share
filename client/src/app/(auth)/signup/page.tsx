@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -164,13 +165,11 @@ const signupForm = () => {
           </div>
           <div>
             {/*
-            <div>
-              <div className="grid gap-2">
-                <InputOTPForm
-                  value={otp}
-                  onChange={(e: any) => setOtp(e?.target?.value)}
-                />
-              </div>
+            <div className="grid gap-2">
+              <InputOTPForm
+                value={otp}
+                onChange={(e: any) => setOtp(e?.target?.value)}
+              />
             </div>
             */}
             <div>
