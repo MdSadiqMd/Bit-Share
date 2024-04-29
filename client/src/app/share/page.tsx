@@ -15,27 +15,35 @@ let socket: any = null;
 let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`;
 
 const share = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const auth = useAppSelector((state) => state.authReducer)
-  const [file, setFile] = useState<any>(null)
-  const [email, setEmail] = useState('')
-  const [fileName, setFileName] = useState('')
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const auth = useAppSelector((state) => state.authReducer);
+  const [file, setFile] = useState<any>(null);
+  const [email, setEmail] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploadpercent, setUploadpercent] = useState(0);
 
-  const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles)
-    setFile(acceptedFiles[0])
-  }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+  let onDrop = useCallback((acceptedFiles: any) => {
+    console.log(acceptedFiles);
+    setFile(acceptedFiles[0]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const removeFile = () => {
-    setFile(null)
-  }
-  const viewFile = () => { }
+    setFile(null);
+  };
 
-  const [uploading, setUploading] = useState(false)
-  const [uploadpercent, setUploadpercent] = useState(0)
+  const viewFile = () => {};
 
-  const Router = useRouter()
+  useEffect(() => {
+    console.log(auth.isAuth);
+    if (!auth.isAuth) {
+      return router.push("/login");
+    }
+  }, [auth]);
+
   return (
     <>
       <div>
