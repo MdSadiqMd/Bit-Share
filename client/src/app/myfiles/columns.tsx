@@ -1,7 +1,9 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 type File = {
   fileName: string;
@@ -18,15 +20,26 @@ type File = {
 export const columns: ColumnDef<File>[] = [
   {
     accessorKey: "fileName",
-    header: () => <div className="text-left">File Name</div>,
+    /*header: () => <div className="text-left">File Name</div>,
     cell: ({ row }) => {
       const sortedNames = row.getValue("fileName").split(" ").sort().join(" ");
       return <div className="text-left font-medium">{sortedNames}</div>;
+    },*/
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          File Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
   },
   {
     accessorKey: "senderEmail",
-    header: () => <div className="text-left">Sender Email</div>,
+    /*header: () => <div className="text-left">Sender Email</div>,
     cell: ({ row }) => {
       const sortedEmail = row
         .getValue("senderEmail")
@@ -35,6 +48,17 @@ export const columns: ColumnDef<File>[] = [
         .sort()
         .join("@");
       return <div className="text-left font-medium">{sortedEmail}</div>;
+    */
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Sender Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
   },
   {
@@ -43,10 +67,23 @@ export const columns: ColumnDef<File>[] = [
   },
   {
     accessorKey: "sharedAt",
+    /*
     header: () => <div className="text-left">Shared At</div>,
     cell: ({ row }) => {
       const formatted = new Date(row.getValue("sharedAt")).toLocaleDateString();
       return <div className="text-left font-medium">{formatted}</div>;
+    },
+    */
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Shared At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
   },
   {
