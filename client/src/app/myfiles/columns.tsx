@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import React from "react";
 
 type File = {
   fileName: string;
@@ -17,22 +18,39 @@ type File = {
 export const columns: ColumnDef<File>[] = [
   {
     accessorKey: "fileName",
-    header: "file name",
+    header: () => <div className="text-left">File Name</div>,
+    cell: ({ row }) => {
+      const sortedNames = row.getValue("fileName").split(" ").sort().join(" ");
+      return <div className="text-left font-medium">{sortedNames}</div>;
+    },
   },
   {
     accessorKey: "senderEmail",
-    header: "Sender Email",
+    header: () => <div className="text-left">Sender Email</div>,
+    cell: ({ row }) => {
+      const sortedEmail = row
+        .getValue("senderEmail")
+        .toLowerCase()
+        .split("@")
+        .sort()
+        .join("@");
+      return <div className="text-left font-medium">{sortedEmail}</div>;
+    },
   },
   {
-    accessorKey: "extension",
-    header: "extension",
+    accessorKey: "fileType",
+    header: "File Type",
   },
   {
     accessorKey: "sharedAt",
-    header: "shared At",
+    header: () => <div className="text-left">Shared At</div>,
+    cell: ({ row }) => {
+      const formatted = new Date(row.getValue("sharedAt")).toLocaleDateString();
+      return <div className="text-left font-medium">{formatted}</div>;
+    },
   },
   {
     accessorKey: "fileURL",
-    header: "preview",
+    header: "file URL",
   },
 ];
