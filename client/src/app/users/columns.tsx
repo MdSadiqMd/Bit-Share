@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-interface File {
+type File = {
   filename: string;
   fileurl: string;
   fileType: string | null;
@@ -12,7 +12,7 @@ interface File {
   updatedAt: string;
   createdAt: string;
   _id: string;
-}
+};
 
 export const columns: ColumnDef<File>[] = [
   {
