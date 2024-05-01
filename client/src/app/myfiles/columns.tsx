@@ -3,11 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 type File = {
-  filename: string;
+  fileName: string;
   fileurl: string;
   fileType: string | null;
   receiveremail: string;
-  senderemail: string;
+  senderEmail: string;
   sharedAt: string;
   updatedAt: string;
   createdAt: string;
@@ -16,23 +16,23 @@ type File = {
 
 export const columns: ColumnDef<File>[] = [
   {
-    accessorKey: "filename",
-    header: "File Name",
+    accessorKey: "fileName",
+    header: "file name",
   },
   {
-    accessorKey: "senderemail",
-    header: "Sender",
+    accessorKey: "senderEmail",
+    header: "Sender Email",
   },
   {
-    accessorKey: "fileType",
-    header: "fileType",
+    accessorKey: "extension",
+    header: "extension",
   },
   {
     accessorKey: "sharedAt",
-    header: "sharedAt",
+    header: "shared At",
   },
   {
-    accessorKey: "fileurl",
-    header: "fileurl",
+    accessorKey: "fileURL",
+    header: "preview",
   },
 ];

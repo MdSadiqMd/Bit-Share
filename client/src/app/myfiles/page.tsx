@@ -7,7 +7,7 @@ import io from "socket.io-client";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { logIn, logOut } from "@/redux/features/auth-slice";
+import { logIn, logOut } from "@/redux/features/auth.slice";
 import { toast } from "react-toastify";
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
@@ -15,7 +15,7 @@ import { DataTable } from "./data-table";
 interface File {
   createdAt: string;
   filename: string;
-  fileurl: string;
+  fileURL: string;
   fileType: string | null;
   receiveremail: string;
   senderemail: string;
@@ -44,34 +44,42 @@ const myFilesPage = () => {
     }
   };
 
-  const getFileType = (fileurl: any) => {
-    const extension = fileurl.split(".").pop().toLowerCase();
-    switch (extension) {
-      case "mp4":
-      case "avi":
-      case "mov":
-        return "video";
+  const getFileType = (fileURL: string) => {
+    const extension = fileURL?.split(".").pop()?.toLowerCase();
+    let fileType = "unknown";
+    if (extension) {
+      switch (extension) {
+        case "mp4":
+        case "avi":
+        case "mov":
+          fileType = "video";
+          break;
 
-      case "jpg":
-      case "jpeg":
-      case "png":
-      case "gif":
-        return "image";
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          fileType = "image";
+          break;
 
-      case "pdf":
-      case "doc":
-      case "docx":
-      case "txt":
-        return "document";
+        case "pdf":
+        case "doc":
+        case "docx":
+        case "txt":
+          fileType = "document";
+          break;
 
-      default:
-        return "unknown";
+        default:
+          fileType = "unknown";
+          break;
+      }
     }
-    setData(...data,extension);
+    return fileType;
   };
 
   useEffect(() => {
     getAllFiles();
+    console.log(data);
   }, []);
 
   // const [socketId, setSocketId] = useState<string>("")
@@ -131,7 +139,13 @@ const myFilesPage = () => {
         <Navbar />
       </div>
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          columns={columns}
+          data={data.map((file) => ({
+            ...file,
+            fileType: getFileType(file.fileURL),
+          }))}
+        />
       </div>
     </>
   );
