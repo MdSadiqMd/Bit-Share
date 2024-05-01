@@ -18,6 +18,10 @@ import {
 import authTokenHandler from "../middlewares/authTokenhandler";
 require("dotenv").config();
 
+interface IGetUserAuthInfoRequest extends Request {
+  user: string;
+}
+
 const router: Router = express.Router();
 const app = express();
 app.use(express.json());
@@ -157,9 +161,10 @@ router.post(
 router.get(
   "/getfiles",
   authTokenHandler,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: any, res: Response, next: NextFunction) => {
     try {
-      let user = await userModel.findOne({ email: req.body.email });
+      let user = await userModel.findOne({ _id: req.userId });
+      //console.log("user in get files",user);
       if (!user) {
         return response(res, 400, "User not found", null, false);
       }
