@@ -250,17 +250,21 @@ router.post(
   }
 );
 
-router.get("/getuser", async (req, res, next) => {
-  try {
-    const { email } = req.body.email;
-    const user = await userModel.findById(email);
-    if (!user) {
-      return response(res, 400, "User not found", null, false);
+router.get(
+  "/getuser",
+  authTokenHandler,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email } = req.body.email;
+      const user = await userModel.findOne({ email: email });
+      if (!user) {
+        return response(res, 400, "User not found", null, false);
+      }
+      return response(res, 200, "User found", user, true);
+    } catch (err) {
+      return response(res, 500, "Internal Server Error", null, false);
     }
-    return response(res, 200, "User found", user, true);
-  } catch (err) {
-    return response(res, 500, "Internal Server Error", null, false);
   }
-});
+);
 
 export default router;
