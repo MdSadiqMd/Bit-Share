@@ -149,7 +149,23 @@ router.post(
       return response(res, 200, "File Shared Successfully", null, true);
     } catch (error) {
       console.log(error);
+      return response(res, 500, "Internal Server Error", null, false);
+    }
+  }
+);
 
+router.get(
+  "/getfiles",
+  authTokenHandler,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let user = await userModel.findOne({ email: req.body.email });
+      if (!user) {
+        return response(res, 400, "User not found", null, false);
+      }
+      return response(res, 200, "files fetched successfully", user.files, true);
+    } catch (err) {
+      console.log(err);
       return response(res, 500, "Internal Server Error", null, false);
     }
   }
