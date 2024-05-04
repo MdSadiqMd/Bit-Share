@@ -17,7 +17,7 @@ import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 interface FormData {
   email: string;
@@ -60,15 +60,17 @@ const loginPage = () => {
       credentials: "include",
     });
     let data = await res.json();
+    console.log(res);
     console.log(data);
 
     if (data.ok) {
-      // console.log(data.data)
-      // localStorage.setItem('authToken', data.data.authToken)
-      // localStorage.setItem('refreshToken', data.data.refreshToken)
+      console.log(data.data);
+      console.log(data.ok);
+      localStorage.setItem("authToken", data.data.authToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
       toast.success("Login Success");
-      router.push("/share");
       getUserData();
+      router.push("/share");
     } else {
       toast.error(data.message);
     }

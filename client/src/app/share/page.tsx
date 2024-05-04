@@ -37,14 +37,12 @@ const share = () => {
 
   const viewFile = () => {};
 
-  /*
   useEffect(() => {
-    console.log(auth.isAuth);
-    if (!auth.isAuth) {
+    console.log(!auth.isAuth);
+    if (auth.isAuth) {
       return router.push("/login");
     }
   }, [auth]);
-  */
 
   return (
     <>
