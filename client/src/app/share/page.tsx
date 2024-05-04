@@ -96,7 +96,7 @@ const share = () => {
                     </svg>
                     <div className="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
                       <Image
-                        className="has-mask h-36 object-center"
+                        className="h-36 object-center"
                         src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
                         alt="freepik image"
                         width={100}

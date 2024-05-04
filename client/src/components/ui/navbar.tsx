@@ -208,16 +208,31 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                       </Transition>
                     </Menu>
 
-                    {auth.isAuth ? (
+                    {!auth.isAuth ? (
                       <div className="hidden sm:flex">
-                        <Button onClick={() => handleLogout()}>LogOut</Button>
+                        <Button
+                          variant="secondary"
+                          onClick={() => handleLogout()}
+                        >
+                          Log out
+                        </Button>
                       </div>
                     ) : (
                       <div className="space-x-2 hidden sm:flex">
-                        <Button variant="secondary">
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            router.push("/login");
+                          }}
+                        >
                           <Link href="/login">Login</Link>
                         </Button>
-                        <Button variant="secondary">
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            router.push("/signup");
+                          }}
+                        >
                           <Link href="/signup">Signup</Link>
                         </Button>
                       </div>
