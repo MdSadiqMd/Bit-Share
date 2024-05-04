@@ -36,7 +36,7 @@ const share = () => {
   };
 
   const viewFile = () => {};
-  
+
   /*
   useEffect(() => {
     console.log(auth.isAuth);
@@ -65,11 +65,21 @@ const share = () => {
           <form className="mt-8 space-y-6" action="#" method="POST">
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-md font-normal text-gray-900 dark:text-gray-200 tracking-wide">
+                File Name
+              </label>
+              <input
+                className="text-base p-2 border text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:border-gray-500"
+                type="text"
+                placeholder="your file name"
+              />
+            </div>
+            <div className="grid grid-cols-1 space-y-2">
+              <label className="text-md font-normal text-gray-900 dark:text-gray-200 tracking-wide">
                 Title
               </label>
               <input
                 className="text-base p-2 border text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:border-gray-500"
-                type=""
+                type="email"
                 placeholder="youremail@gmail.com"
               />
             </div>
@@ -79,7 +89,7 @@ const share = () => {
               </label>
               <div className="flex items-center justify-center w-full">
                 <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
-                  <div className="h-full w-full text-center flex flex-col justify-center items-center  ">
+                  <div className="h-full w-full text-center flex flex-col justify-center items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
@@ -98,25 +108,20 @@ const share = () => {
                       <Image
                         className="h-36 object-center"
                         src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
-                        alt="freepik image"
+                        alt="Upload Image"
                         width={100}
                         height={100}
                       />
                     </div>
-                    <p className="pointer-none text-gray-500 ">
+                    <p className="pointer-none text-gray-500">
                       <span className="text-sm">Drag and drop</span> files here{" "}
-                      <br /> or{" "}
-                      <a
-                        href=""
-                        id=""
-                        className="text-blue-600 hover:underline"
-                      >
-                        select a file
-                      </a>{" "}
+                      <br /> or <input type="file" className="hidden" />{" "}
+                      <span className="text-sky-400 hover:underline-offset-[3px]">
+                        select{" "}
+                      </span>
                       from your computer
                     </p>
                   </div>
-                  <input type="file" className="hidden" />
                 </label>
               </div>
             </div>
