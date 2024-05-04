@@ -17,6 +17,7 @@ import multer from "multer";
 import fs from "fs";
 const socketIO = require("socket.io");
 import nodemailer, { Transporter } from "nodemailer";
+import { createServer } from "node:http";
 import authRoutes from "./routes/auth.routes";
 import fileShareRoutes from "./routes/fileShare.routes";
 import userModel from "./models/user.model";
@@ -44,6 +45,7 @@ export {
   VerifyErrors,
   multer,
   nodemailer,
+  createServer,
   Transporter,
   fs,
   authRoutes,

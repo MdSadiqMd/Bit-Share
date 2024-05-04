@@ -1,4 +1,5 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+import { Socket } from "socket.io";
 import {
   express,
   Application,
@@ -8,6 +9,7 @@ import {
   SocketIOServer,
   http,
   socketIO,
+  createServer,
   cors,
   bodyParser,
   cookieParser,
@@ -15,6 +17,7 @@ import {
   fileShareRoutes,
   connectDB,
 } from "./imports";
+require("dotenv").config();
 
 connectDB();
 
@@ -26,10 +29,10 @@ interface CustomCookieOptions extends cookieParser.CookieParseOptions {
   signed?: boolean;
 }
 
-const PORT: number = 8000;
+const PORT: number = parseInt(process.env.PORT || "8000", 10);
 const app: Application = express();
-const server: http.Server = http.createServer(app);
-const io: SocketIOServer = socketIO(server);
+const server: http.Server = createServer(app);
+const io: SocketIOServer = new SocketIOServer(server);
 
 const allowOrigins: string[] = ["http://localhost:3000"];
 app.use(express.json());
@@ -69,6 +72,10 @@ app.use("/file", fileShareRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Running");
+});
+
+io.on("connection", (Socket) => {
+  console.log("new connection", Socket.id);
 });
 
 server.listen(PORT, () => {
