@@ -52,21 +52,21 @@ const myFilesPage = () => {
         case "mp4":
         case "avi":
         case "mov":
-          fileType = "video";
+          fileType = "Video";
           break;
 
         case "jpg":
         case "jpeg":
         case "png":
         case "gif":
-          fileType = "image";
+          fileType = "Image";
           break;
 
         case "pdf":
         case "doc":
         case "docx":
         case "txt":
-          fileType = "document";
+          fileType = "Document";
           break;
 
         default:
@@ -147,7 +147,7 @@ const myFilesPage = () => {
             fileName: file.fileName,
             fileurl: file.fileURL,
             senderEmail: file.senderEmail,
-            sharedAt:formatDateTime(file.sharedAt),
+            sharedAt: formatDateTime(file.sharedAt),
           }))}
         />
       </div>
