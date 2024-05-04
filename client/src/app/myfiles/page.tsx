@@ -8,17 +8,17 @@ import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logIn, logOut } from "@/redux/features/auth.slice";
-import { toast } from "react-toastify";
-import { Payment, columns } from "./columns";
+import formatDateTime from "@/lib/formatDate";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
 interface File {
   createdAt: string;
-  filename: string;
+  fileName: string;
   fileURL: string;
   fileType: string | null;
   receiveremail: string;
-  senderemail: string;
+  senderEmail: string;
   sharedAt: string;
   updatedAt: string;
   _id: string;
@@ -144,6 +144,10 @@ const myFilesPage = () => {
           data={data.map((file) => ({
             ...file,
             fileType: getFileType(file.fileURL),
+            fileName: file.fileName,
+            fileurl: file.fileURL,
+            senderEmail: file.senderEmail,
+            sharedAt:formatDateTime(file.sharedAt),
           }))}
         />
       </div>
