@@ -32,7 +32,12 @@ interface CustomCookieOptions extends cookieParser.CookieParseOptions {
 const PORT: number = parseInt(process.env.PORT || "8000", 10);
 const app: Application = express();
 const server: http.Server = createServer(app);
-const io: SocketIOServer = new SocketIOServer(server);
+const io: SocketIOServer = new SocketIOServer(server, {
+  cors: {
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  },
+});
 
 const allowOrigins: string[] = ["http://localhost:3000"];
 app.use(express.json());
@@ -76,6 +81,19 @@ app.get("/", (req: Request, res: Response) => {
 
 io.on("connection", (Socket) => {
   console.log("new connection", Socket.id);
+  Socket.on("joinself", (data) => {
+    console.log("joinself", data);
+    Socket.join(data);
+  });
+  Socket.on("uploaded", (data) => {
+    let sender = data.from;
+    let receiver = data.to;
+    console.log("uploaded", data);
+    Socket.to(receiver).emit("notify", {
+      from: sender,
+      message: "New file shared",
+    });
+  });
 });
 
 server.listen(PORT, () => {
