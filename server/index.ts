@@ -80,7 +80,12 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 io.on("connection", (Socket) => {
-  console.log("new connection", Socket.id);
+  Socket.on("connection", (Socket) => {
+    console.log("new connection", Socket.id);
+  });
+  Socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
   Socket.on("joinself", (data) => {
     console.log("joinself", data);
     Socket.join(data);
