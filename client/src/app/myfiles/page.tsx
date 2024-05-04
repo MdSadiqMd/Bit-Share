@@ -1,11 +1,11 @@
 "use client";
 
 import Navbar from "@/components/ui/navbar";
-import { Table } from "@/components/ui/table";
 import React, { useEffect, useMemo, useState } from "react";
 import io from "socket.io-client";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { logIn, logOut } from "@/redux/features/auth.slice";
 import formatDateTime from "@/lib/formatDate";
@@ -28,9 +28,37 @@ let socket: any = null;
 let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`;
 
 const myFilesPage = () => {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const auth = useAppSelector((state) => state.authReducer);
   const [data, setData] = useState<File[]>([]);
+  const [socketId, setSocketId] = useState<String | null>(null);
+  socket = useMemo(() => io(apiurl), []);
+
+  useEffect(() => {
+    console.log(!auth.isAuth);
+    if (auth.isAuth) {
+      return router.push("/login");
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("socket connect", socket.id);
+      setSocketId(socket.id);
+    });
+    if (auth.user) {
+      socket.emit("joinself", auth.user.email);
+    } else {
+      getuserdata().then((user) => {
+        socket.emit("joinself", user.email);
+      });
+    }
+    socket.on("notify", (data: any) => {
+      toast.info("New file shared with you" + data.from);
+      getAllFiles();
+    });
+  }, []);
 
   const getAllFiles = async () => {
     let res = await fetch(process.env.NEXT_PUBLIC_URL + "/file/getfiles", {
@@ -81,19 +109,6 @@ const myFilesPage = () => {
     getAllFiles();
     console.log(data);
   }, []);
-
-  // const [socketId, setSocketId] = useState<string>("")
-  // socket = useMemo(() => io(apiurl), [])
-
-  const router = useRouter();
-  /*
-  useEffect(() => {
-    console.log(auth.isAuth)
-    if (!auth.isAuth) {
-      return router.push("/login");
-    }
-  }, [auth]);
-  */
 
   // useEffect(() => {
   //     socket.on('connect', () => {
