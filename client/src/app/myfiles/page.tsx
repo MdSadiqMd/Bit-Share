@@ -36,6 +36,11 @@ const myFilesPage = () => {
   socket = useMemo(() => io(apiurl), []);
 
   useEffect(() => {
+    getAllFiles();
+    console.log(data);
+  }, []);
+
+  useEffect(() => {
     console.log(!auth.isAuth);
     if (auth.isAuth) {
       return router.push("/login");
@@ -47,8 +52,8 @@ const myFilesPage = () => {
       console.log("socket connect", socket.id);
       setSocketId(socket.id);
     });
-    if (auth.user) {
-      socket.emit("joinself", auth.user.email);
+    if (!auth.user) {
+      socket.emit("joinself", auth.user?.email);
     } else {
       getuserdata().then((user) => {
         socket.emit("joinself", user?.email);
@@ -104,11 +109,6 @@ const myFilesPage = () => {
     }
     return fileType;
   };
-
-  useEffect(() => {
-    getAllFiles();
-    console.log(data);
-  }, []);
 
   const getuserdata = async () => {
     let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/getuser", {
