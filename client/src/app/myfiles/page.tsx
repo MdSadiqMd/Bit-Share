@@ -40,7 +40,7 @@ const myFilesPage = () => {
     if (auth.isAuth) {
       return router.push("/login");
     }
-  }, [auth]);
+  }, []);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -51,7 +51,7 @@ const myFilesPage = () => {
       socket.emit("joinself", auth.user.email);
     } else {
       getuserdata().then((user) => {
-        socket.emit("joinself", user.email);
+        socket.emit("joinself", user?.email);
       });
     }
     socket.on("notify", (data: any) => {
@@ -109,26 +109,6 @@ const myFilesPage = () => {
     getAllFiles();
     console.log(data);
   }, []);
-
-  // useEffect(() => {
-  //     socket.on('connect', () => {
-  //       console.log(socket.id)
-  //       setSocketId(socket.id)
-  //     })
-
-  //     if(auth.user){socket.emit('joinself',auth.user.email)}
-  //     else {
-  //       getuserdata().then((user)=>{
-  //         socket.emit('joinself',user.email)
-  //       })
-  //     }
-
-  //     socket.on('notify', (data:any) => {
-  //       toast.info('New file shared with you' + data.from)
-  //       getAllFiles()
-  //     })
-
-  // }, [])
 
   const getuserdata = async () => {
     let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/getuser", {

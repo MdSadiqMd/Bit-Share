@@ -31,6 +31,64 @@ const share = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const handleUpload = async () => {
+    console.log(email);
+    console.log(file);
+    console.log(fileName);
+    if (!email) {
+      toast.error("Please fill all the fields");
+      return;
+    }
+    if (!file) {
+      toast.error("Please select a file");
+      return;
+    }
+    let formdata = new FormData();
+    formdata.append("receiveremail", email);
+    formdata.append("filename", fileName);
+    if (file) {
+      formdata.append("clientfile", file);
+    }
+    setUploading(true);
+    let req = new XMLHttpRequest();
+    req.open("POST", process.env.NEXT_PUBLIC_URL + "/file/sharefile", true);
+    req.withCredentials = true;
+    /*
+    req.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable) {
+        const percent = (event.loaded / event.total) * 100;
+        setUploadpercent(Math.round(percent));
+        console.log(`Upload progress: ${Math.round(percent)}%`);
+      }
+    });
+    req.upload.addEventListener("load", () => {
+      console.log("Upload complete!");
+      toast.success("File uploaded successfully");
+    });
+    req.upload.addEventListener("error", (error) => {
+      console.error("Upload failed:", error);
+      toast.error("File upload failed");
+      setUploading(false);
+    });
+    */
+    req.onreadystatechange = function () {
+      if (req.readyState === 4) {
+        setUploading(false);
+        if (req.status === 200) {
+          toast.success("File shared successfully");
+          socket.emit("uploaded", {
+            from: auth.user.email,
+            to: email,
+          });
+          router.push("/myfiles");
+        } else {
+          toast.error("File upload failed");
+        }
+      }
+    };
+    req.send(formdata);
+  };
+
   const removeFile = () => {
     setFile(null);
   };
@@ -131,6 +189,7 @@ const share = () => {
                 type="submit"
                 className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                   font-semibold focus:multi-['outline-none;shadow-outline'] hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+                onClick={handleUpload}
               >
                 Upload
               </button>
