@@ -100,7 +100,7 @@ const share = () => {
     if (auth.isAuth) {
       return router.push("/login");
     }
-  }, [auth]);
+  }, []);
 
   return (
     <>
@@ -114,9 +114,6 @@ const share = () => {
             <h2 className="mt-5 text-3xl font-medium text-gray-900 dark:text-gray-200">
               File Upload
             </h2>
-            {/*<p className="mt-2 text-sm text-gray-400">
-                Lorem ipsum is placeholder text.
-              </p>*/}
           </div>
           <form className="mt-8 space-y-6" action="#" method="POST">
             <div className="grid grid-cols-1 space-y-2">

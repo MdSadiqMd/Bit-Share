@@ -70,7 +70,7 @@ const loginPage = () => {
       localStorage.setItem("refreshToken", data.data.refreshToken);
       toast.success("Login Success");
       getUserData();
-      router.push("/share");
+      router.push("/myfiles");
     } else {
       toast.error(data.message);
     }
