@@ -74,6 +74,9 @@
   * {
     @apply border-border;
   }
+  *::-webkit-scrollbar {
+    scrollbar-width: thin;
+  }
   body {
     @apply bg-background text-foreground;
   }
