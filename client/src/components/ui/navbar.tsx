@@ -87,7 +87,7 @@ export const Navbar: React.FC<{ search?: string }> = () => {
     <>
       <Disclosure
         as="nav"
-        className="bg-gray-150 dark:bg-gray-950 scrollbar-hide shadow transition hover:shadow-md z-40 m-5 ml-18 mr-18 rounded-2xl"
+        className="bg-gray-150 shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-40 m-5 ml-18 mr-18 rounded-2xl dark:bg-gray-950 scrollbar-hide transition"
       >
         {({ open }): React.JSX.Element => (
           <>

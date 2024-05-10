@@ -107,8 +107,8 @@ const share = () => {
       <div>
         <Navbar />
       </div>
-      <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-7 px-4 sm:px-6 lg:px-8 dark:bg-gray-500 bg-no-repeat bg-cover">
-        <div className="absolute bg-white dark:bg-black opacity-60 inset-0 z-0"></div>
+      <div className="relative min-h-screen flex items-center justify-center bg-white py-7 px-4 sm:px-6 lg:px-8 dark:bg-black bg-no-repeat bg-cover">
+        <div className="absolute bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:25px_25px] dark:bg-gray-950 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:35px_35px] opacity-60 inset-0 z-0"></div>
         <div className="sm:max-w-lg w-full p-10 bg-white dark:bg-black rounded-xl z-10 shadow-xl shadow-indigo-500/40">
           <div className="text-center">
             <h2 className="mt-5 text-3xl font-medium text-gray-900 dark:text-gray-200">
