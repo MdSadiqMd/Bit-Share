@@ -8,14 +8,28 @@ import {
   bcrypt,
   jwt,
   fs,
-  multer,
   nodemailer,
   Transporter,
   response,
   NextFunction,
 } from "../imports";
 import authTokenHandler from "../middlewares/authTokenhandler";
-require("dotenv").config();
+const {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 interface CustomRequest extends Request {
   userId?: string;
@@ -52,35 +66,6 @@ async function mailer(receiverEmail: string, code: number): Promise<void> {
   console.log(nodemailer.getTestMessageUrl(info));
 }
 
-const storage = multer.diskStorage({
-  destination: (
-    req: any,
-    file: Express.Multer.File,
-    cb: (error: Error | null, destination: string) => void
-  ) => {
-    cb(null, "./public"); // the file path should be same not the one in import statements
-  },
-  filename: (
-    req: any,
-    file: Express.Multer.File,
-    cb: (error: Error | null, filename: string) => void
-  ) => {
-    let fileType = file.mimetype.split("/")[1];
-    console.log(req.headers.filename);
-    cb(null, `${Date.now()}.${fileType}`);
-  },
-});
-
-const upload = multer({ storage: storage });
-const fileUpload = (req: any, res: any, next: NextFunction) => {
-  upload.single("clientfile")(req, res, (err: any) => {
-    if (err) {
-      return response(res, 400, "file Upload Failed", null, false);
-    }
-    next();
-  });
-};
-
 /*router.get("/test", (req, res) => {
   res.send("Auth Routes Testing");
   //mailer("mohammadsadiq4930@gmail.com", 12345);
@@ -112,7 +97,6 @@ router.post("/sendotp", async (req: Request, res: Response) => {
 
 router.post(
   "/register",
-  fileUpload,
   async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.file);
     try {
@@ -263,6 +247,75 @@ router.get(
       return response(res, 200, "User found", user, true);
     } catch (err) {
       return response(res, 500, "Internal Server Error", null, false);
+    }
+  }
+);
+
+router.post(
+  "/changepassword",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, otp, password } = req.body;
+      let user = await userModel.findOne({ email: email });
+      let verificationQueue = await verificationModel.findOne({ email: email });
+      if (!user) {
+        return response(res, 400, "User doesn't exist", null, false);
+      }
+      if (!verificationQueue) {
+        return response(res, 400, "Please send otp first", null, false);
+      }
+      const isMatch = await bcrypt.compare(otp, verificationQueue.code);
+      if (!isMatch) {
+        return response(res, 400, "Invalid OTP", null, false);
+      }
+      user.password = password;
+      await user.save();
+      await verificationModel.deleteOne({ email: email });
+      return response(res, 200, "Password changed successfully", null, true);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+const getObjectURL = async (key: string): Promise<string> => {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME as string,
+    Key: key,
+  };
+  return await getSignedUrl(s3Client, new GetObjectCommand(params));
+};
+
+const postObjectURL = async (
+  filename: string,
+  contentType: string
+): Promise<string> => {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME as string,
+    Key: filename,
+    ContentType: contentType,
+  };
+  return await getSignedUrl(s3Client, new PutObjectCommand(params));
+};
+
+router.get(
+  "/generatepostobjecturl",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const timeinms = new Date().getTime();
+      const signedUrl = await postObjectURL(timeinms.toString(), "");
+      return response(
+        res,
+        200,
+        "signed url generated",
+        {
+          signedUrl: signedUrl,
+          filekey: timeinms.toString(),
+        },
+        true
+      );
+    } catch (err) {
+      next(err);
     }
   }
 );
