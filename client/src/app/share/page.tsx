@@ -31,62 +31,81 @@ const share = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleUpload = async () => {
-    console.log(email);
-    console.log(file);
-    console.log(fileName);
-    if (!email) {
-      toast.error("Please fill all the fields");
-      return;
+  const generatepostobjecturl = async () => {
+    let res = await fetch(
+      process.env.NEXT_PUBLIC_URL + "/file/generatepostobjecturl",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+    let data = await res.json();
+    if (data.ok) {
+      console.log(data.data.signedUrl);
+      return data.data;
+    } else {
+      toast.error("Failed to generate post object url");
+      return null;
     }
-    if (!file) {
-      toast.error("Please select a file");
-      return;
-    }
-    let formdata = new FormData();
-    formdata.append("receiveremail", email);
-    formdata.append("filename", fileName);
-    if (file) {
-      formdata.append("clientfile", file);
-    }
+  };
+
+  const uploadtos3byurl = async (url: any) => {
     setUploading(true);
-    let req = new XMLHttpRequest();
-    req.open("POST", process.env.NEXT_PUBLIC_URL + "/file/sharefile", true);
-    req.withCredentials = true;
-    /*
-    req.upload.addEventListener("progress", (event) => {
-      if (event.lengthComputable) {
-        const percent = (event.loaded / event.total) * 100;
-        setUploadpercent(Math.round(percent));
-        console.log(`Upload progress: ${Math.round(percent)}%`);
-      }
-    });
-    req.upload.addEventListener("load", () => {
-      console.log("Upload complete!");
-      toast.success("File uploaded successfully");
-    });
-    req.upload.addEventListener("error", (error) => {
-      console.error("Upload failed:", error);
-      toast.error("File upload failed");
-      setUploading(false);
-    });
-    */
-    req.onreadystatechange = function () {
-      if (req.readyState === 4) {
-        setUploading(false);
-        if (req.status === 200) {
-          toast.success("File shared successfully");
-          socket.emit("uploaded", {
-            from: auth.user.email,
-            to: email,
-          });
-          router.push("/myfiles");
-        } else {
-          toast.error("File upload failed");
-        }
-      }
+    const options = {
+      method: "PUT",
+      body: file,
     };
-    req.send(formdata);
+    let res = await fetch(url, options);
+    if (res.ok) {
+      toast.success("File uploaded successfully");
+      return true;
+    } else {
+      toast.error("Failed to upload file");
+      return false;
+    }
+  };
+
+  const handleUpload = async () => {
+    setUploading(true);
+    let s3urlobj = await generatepostobjecturl();
+    if (!s3urlobj) {
+      setUploading(false);
+      return;
+    }
+    let filekey = s3urlobj.filekey;
+    let s3url = s3urlobj.signedUrl;
+    let uploaded = await uploadtos3byurl(s3url);
+    if (!uploaded) {
+      setUploading(false);
+      return;
+    }
+    toast.success("File uploaded successfully");
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/file/sharefile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        senderEmail: auth?.user?.email,
+        receiverEmail: email,
+        filename: fileName,
+        fileKey: filekey,
+        fileType: file.type,
+      }),
+    });
+    let data = await res.json();
+    setUploading(false);
+    if (data.ok) {
+      toast.success("File shared successfully");
+      // socket.emit('uploaded', {
+      //   from: auth.user.email,
+      //   to: email,
+      // })
+      router.push("/myfiles");
+    } else {
+      toast.error("Failed to share file");
+    }
   };
 
   const removeFile = () => {
