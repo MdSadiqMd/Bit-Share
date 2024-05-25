@@ -149,7 +149,7 @@ const signupForm = () => {
               {!sendingOtp ? (
                 <Button
                   onClick={() => {
-                    sendOTP;
+                    sendOTP();
                   }}
                   className="w-30"
                 >
@@ -163,40 +163,34 @@ const signupForm = () => {
               )}
             </div>
           </div>
-          <div>
-            {/*
-            <div className="grid gap-2">
-              <InputOTPForm
-                value={otp}
-                onChange={(e: any) => setOtp(e?.target?.value)}
-              />
-            </div>
-            */}
-            <div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="image">Your Profile Pic</Label>
-                <Input
-                  id="image"
-                  type="file"
-                  onChange={(e) => setImageFile(e.target.files![0])}
-                />
-              </div>
-            </div>
+          {/*<div className="grid gap-2">
+            <InputOTPForm
+              value={otp}
+              onChange={(e: any) => setOtp(e?.target?.value)}
+            />
+            </div>*/}
+          <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="image">Your Profile Pic</Label>
+            <Input
+              id="image"
+              type="file"
+              onChange={(e) => setImageFile(e.target.files![0])}
+            />
           </div>
           {isLoading ? (
             <Button
               onClick={() => {
                 handleLoading();
-                handleSignup;
+                handleSignup();
               }}
               type="submit"
               className="w-full"
@@ -220,4 +214,5 @@ const signupForm = () => {
     </Card>
   );
 };
+
 export default signupForm;
