@@ -5,11 +5,6 @@ import {
   NextFunction,
   Router,
   userModel,
-  verificationModel,
-  bcrypt,
-  jwt,
-  fs,
-  multer,
   nodemailer,
   Transporter,
   response,
@@ -217,6 +212,31 @@ router.get(
     } catch (err) {
       console.log(err);
       return response(res, 500, "Internal Server Error", null, false);
+    }
+  }
+);
+
+router.get(
+  "/gets3urlbykey/:key",
+  authTokenHandler,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { key } = req.params as { key: string };
+      const signedUrl = await getObjectURL(key);
+      if (!signedUrl) {
+        return response(res, 400, "signed url not found", null, false);
+      }
+      return response(
+        res,
+        200,
+        "signed url generated",
+        {
+          signedUrl: signedUrl,
+        },
+        true
+      );
+    } catch (err) {
+      next(err);
     }
   }
 );
