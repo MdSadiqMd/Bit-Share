@@ -16,11 +16,27 @@ import {
   errorHandler,
 } from "../imports";
 import authTokenHandler from "../middlewares/authTokenhandler";
+const {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const dotenv = require("dotenv");
+dotenv.config();
 require("dotenv").config();
 
 interface IGetUserAuthInfoRequest extends Request {
   user: string;
 }
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 const router: Router = express.Router();
 const app = express();
@@ -54,6 +70,50 @@ async function mailer(
   console.log(nodemailer.getTestMessageUrl(info));
 }
 
+const getObjectURL = async (key: string): Promise<string> => {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME as string,
+    Key: key,
+  };
+  return await getSignedUrl(s3Client, new GetObjectCommand(params));
+};
+
+const postObjectURL = async (
+  filename: string,
+  contentType: string
+): Promise<string> => {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME as string,
+    Key: filename,
+    ContentType: contentType,
+  };
+  return await getSignedUrl(s3Client, new PutObjectCommand(params));
+};
+
+router.get(
+  "/generatepostobjecturl",
+  authTokenHandler,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const timeinms = new Date().getTime();
+      const signedUrl = await postObjectURL(timeinms.toString(), "");
+      return response(
+        res,
+        200,
+        "signed url generated",
+        {
+          signedUrl: signedUrl,
+          filekey: timeinms.toString(),
+        },
+        true
+      );
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+/*
 const storage = multer.diskStorage({
   destination: (
     req: any,
@@ -82,6 +142,7 @@ const fileUpload = (req: any, res: any, next: NextFunction) => {
     next();
   });
 };
+*/
 
 router.get("/test", (req, res) => {
   res.send("File Share Routes Testing");
