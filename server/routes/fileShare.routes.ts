@@ -151,23 +151,14 @@ router.get("/test", (req, res) => {
 router.post(
   "/sharefile",
   authTokenHandler,
-  fileUpload,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { senderEmail, receiverEmail, filename } = req.body;
+      const { senderEmail, receiverEmail, filename, fileKey, fileType } =
+        req.body;
       console.log(req.body);
       let sender = await userModel.findOne({ email: senderEmail });
       let receiver = await userModel.findOne({ email: receiverEmail });
       if (!sender) {
-        if (req.file && req.file?.path) {
-          fs.unlink(req.file?.path, (err) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("File Deleted Successfully");
-            }
-          });
-        }
         return response(
           res,
           400,
@@ -177,15 +168,6 @@ router.post(
         );
       }
       if (!receiver) {
-        if (req.file && req.file?.path) {
-          fs.unlink(req.file?.path, (err) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("File Deleted Successfully");
-            }
-          });
-        }
         return response(
           res,
           400,
@@ -197,14 +179,16 @@ router.post(
       sender.files.push({
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
-        fileURL: req.file?.path,
+        fileURL: fileKey,
+        fileType: fileType,
         fileName: filename ? filename : Date.now().toLocaleString(),
         sharedAt: Date.now(),
       });
       receiver.files.push({
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
-        fileURL: req.file?.path,
+        fileURL: fileKey,
+        fileType: fileType,
         fileName: filename ? filename : Date.now().toLocaleString(),
         sharedAt: Date.now(),
       });
