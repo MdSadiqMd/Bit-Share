@@ -8,7 +8,7 @@ const fileSchema = new mongoose.Schema(
     fileURL: { required: true, type: String },
     fileName: { required: true, type: String },
     sharedAt: { required: true, type: Date },
-    fileType: { required: true, type: String },
+    fileType: { type: String },
   },
   { timestamps: true }
 );
