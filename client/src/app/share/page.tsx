@@ -128,12 +128,12 @@ const share = () => {
             </div>
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-md font-normal text-gray-900 dark:text-gray-200 tracking-wide">
-                Title
+                Receiver Email
               </label>
               <input
                 className="text-base p-2 border text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:border-gray-500"
                 type="email"
-                placeholder="youremail@gmail.com"
+                placeholder="receiveremail@gmail.com"
               />
             </div>
             <div className="grid grid-cols-1 space-y-2">
