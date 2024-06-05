@@ -47,7 +47,7 @@ const myFilesPage = () => {
     }
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     socket.on("connect", () => {
       console.log("socket connect", socket.id);
       setSocketId(socket.id);
@@ -63,7 +63,7 @@ const myFilesPage = () => {
       toast.info("New file shared with you" + data.from);
       getAllFiles();
     });
-  }, []);
+  }, []); */
 
   const getAllFiles = async () => {
     let res = await fetch(process.env.NEXT_PUBLIC_URL + "/file/getfiles", {

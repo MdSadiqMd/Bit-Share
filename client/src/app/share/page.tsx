@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
+import { logIn, logOut } from '@/redux/features/auth.slice'
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -115,11 +116,29 @@ const share = () => {
   const viewFile = () => {};
 
   useEffect(() => {
-    console.log(!auth.isAuth);
+    console.log(auth.isAuth);
     if (auth.isAuth) {
       return router.push("/login");
     }
   }, []);
+
+  const getuserdata = async () => {
+    let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/getuser", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    let data = await res.json();
+    if (data.ok) {
+      dispatch(logIn(data.data));
+      return data.data;
+    } else {
+      dispatch(logOut());
+      router.push("/login");
+    }
+  };
 
   return (
     <>
@@ -160,7 +179,7 @@ const share = () => {
                 Attach Document
               </label>
               <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
+                {/* <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
                   <div className="h-full w-full text-center flex flex-col justify-center items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -194,7 +213,12 @@ const share = () => {
                       from your computer
                     </p>
                   </div>
-                </label>
+                </label> */}
+                <input
+                  className="text-base p-2 border text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:border-gray-500"
+                  type="file"
+                  placeholder="receiveremail@gmail.com"
+                />
               </div>
             </div>
             <p className="text-sm text-gray-300">
