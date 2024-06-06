@@ -6,7 +6,7 @@ import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { logIn, logOut } from '@/redux/features/auth.slice'
+import { logIn, logOut } from "@/redux/features/auth.slice";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -26,8 +26,11 @@ const share = () => {
   const [uploadpercent, setUploadpercent] = useState(0);
 
   let onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles);
-    setFile(acceptedFiles[0]);
+    if (acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+    } else {
+      toast.error("No file selected");
+    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -50,19 +53,32 @@ const share = () => {
     }
   };
 
-  const uploadtos3byurl = async (url: any) => {
-    setUploading(true);
-    const options = {
-      method: "PUT",
-      body: file,
-    };
-    let res = await fetch(url, options);
-    if (res.ok) {
-      toast.success("File uploaded successfully");
-      return true;
-    } else {
+  const uploadtos3byurl = async (url: string) => {
+    try {
+      setUploading(true);
+      const options = {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+          "Access-Control-Allow-Origin": "*",
+          "x-amz-acl": "public-read",
+        },
+      };
+      let res = await fetch(url, options);
+      if (res.ok) {
+        toast.success("File uploaded successfully");
+        return true;
+      } else {
+        toast.error("Failed to upload file");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error uploading to S3:", error);
       toast.error("Failed to upload file");
       return false;
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -75,7 +91,10 @@ const share = () => {
     }
     let filekey = s3urlobj.filekey;
     let s3url = s3urlobj.signedUrl;
+    console.log("fileKey: " + filekey);
+    console.log("s3url: " + s3url);
     let uploaded = await uploadtos3byurl(s3url);
+    console.log(uploaded);
     if (!uploaded) {
       setUploading(false);
       return;
@@ -153,7 +172,7 @@ const share = () => {
               File Upload
             </h2>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form className="mt-8 space-y-6" action={handleUpload} method="POST">
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-md font-normal text-gray-900 dark:text-gray-200 tracking-wide">
                 File Name
@@ -217,7 +236,14 @@ const share = () => {
                 <input
                   className="text-base p-2 border text-gray-900 dark:text-gray-200 rounded-lg focus:outline-none focus:border-gray-500"
                   type="file"
-                  placeholder="receiveremail@gmail.com"
+                  placeholder="upload files to send"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      setFile(e.target.files[0]);
+                    } else {
+                      toast.error("Failed to select file");
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -229,7 +255,6 @@ const share = () => {
                 type="submit"
                 className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                   font-semibold focus:multi-['outline-none;shadow-outline'] hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
-                onClick={handleUpload}
               >
                 Upload
               </button>
