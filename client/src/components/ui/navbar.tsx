@@ -7,10 +7,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/toggleButton";
 import { Button } from "./button";
-import { usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { logIn, logOut } from "@/redux/features/auth.slice";
+import Image from "next/image";
 
 export const initialNavigation = [
   { name: "Home", href: "/", current: false },
@@ -147,10 +147,12 @@ export const Navbar: React.FC<{ search?: string }> = () => {
                         <Menu.Button className="relative flex rounded-full bg-gray-300 dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-00">
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
-                          <img
-                            className="h-8 w-8 rounded-full"
+                          <Image
+                            className="rounded-full"
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREl1TQtDYX5h2D_zEWAcR7uZge3w8w-BVjd-4QqFc4ZncS05EcIP7oVgvJWHY7ETxPp8Y&usqp=CAU"
                             alt=""
+                            layout="fill"
+                            objectFit="cover"
                           />
                         </Menu.Button>
                       </div>

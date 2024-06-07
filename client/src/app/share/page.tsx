@@ -9,13 +9,12 @@ import { io } from "socket.io-client";
 import { logIn, logOut } from "@/redux/features/auth.slice";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/ui/navbar";
 
 let socket: any = null;
 let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`;
 
-const share = () => {
+const Share = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const auth = useAppSelector((state) => state.authReducer);
@@ -139,7 +138,7 @@ const share = () => {
     if (auth.isAuth) {
       return router.push("/login");
     }
-  }, []);
+  }, [auth?.isAuth, router]);
 
   const getuserdata = async () => {
     let res = await fetch(process.env.NEXT_PUBLIC_URL + "/auth/getuser", {
@@ -266,4 +265,4 @@ const share = () => {
   );
 };
 
-export default share;
+export default Share;

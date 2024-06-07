@@ -27,7 +27,7 @@ interface File {
 let socket: any = null;
 let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`;
 
-const myFilesPage = () => {
+const MyFilesPage = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const auth = useAppSelector((state) => state.authReducer);
@@ -38,14 +38,14 @@ const myFilesPage = () => {
   useEffect(() => {
     getAllFiles();
     console.log(data);
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     console.log(auth.isAuth);
     if (auth.isAuth) {
       return router.push("/login");
     }
-  }, []);
+  }, [auth?.isAuth, router]);
 
   /* useEffect(() => {
     socket.on("connect", () => {
@@ -150,4 +150,4 @@ const myFilesPage = () => {
   );
 };
 
-export default myFilesPage;
+export default MyFilesPage;

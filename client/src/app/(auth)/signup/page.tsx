@@ -24,7 +24,7 @@ interface FormData {
   password: string;
 }
 
-const signupForm = () => {
+const SignupForm = () => {
   const Router = useRouter();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [otp, setOtp] = useState("");
@@ -34,10 +34,10 @@ const signupForm = () => {
     email: "",
     password: "",
   } as FormData);
-  const [isLoading, useIsLoading] = useState<Boolean>(true);
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
 
   const handleLoading = () => {
-    useIsLoading(!isLoading);
+    setIsLoading(!isLoading);
   };
 
   const handleLoadingOTP = () => {
@@ -78,7 +78,6 @@ const signupForm = () => {
       return;
     }
     let formdata = new FormData();
-
     formdata.append("name", formData.name);
     formdata.append("email", formData.email);
     formdata.append("password", formData.password);
@@ -163,12 +162,12 @@ const signupForm = () => {
               )}
             </div>
           </div>
-          {/*<div className="grid gap-2">
+          <div className="grid gap-2">
             <InputOTPForm
               value={otp}
               onChange={(e: any) => setOtp(e?.target?.value)}
             />
-            </div>*/}
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -215,4 +214,4 @@ const signupForm = () => {
   );
 };
 
-export default signupForm;
+export default SignupForm;

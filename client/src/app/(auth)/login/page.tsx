@@ -11,20 +11,19 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { logIn, logOut } from "@/redux/features/auth.slice";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   email: string;
   password: string;
 }
 
-const loginPage = () => {
+const LoginPage = () => {
   const router = useRouter();
   const auth = useAppSelector((state) => state.authReducer);
   const dispatch = useDispatch<AppDispatch>();
@@ -143,4 +142,4 @@ const loginPage = () => {
   );
 };
 
-export default loginPage;
+export default LoginPage;
