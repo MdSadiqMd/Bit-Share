@@ -11,8 +11,8 @@ import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import Navbar from "@/components/ui/navbar";
 
-let socket: any = null;
-let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`;
+/* let socket: any = null;
+let apiurl: string = `${process.env.NEXT_PUBLIC_URL}`; */
 
 const Share = () => {
   const router = useRouter();
@@ -22,7 +22,6 @@ const Share = () => {
   const [email, setEmail] = useState("");
   const [fileName, setFileName] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [uploadpercent, setUploadpercent] = useState(0);
 
   let onDrop = useCallback((acceptedFiles: any) => {
     if (acceptedFiles.length > 0) {
@@ -60,7 +59,6 @@ const Share = () => {
         body: file,
         headers: {
           "Content-Type": file.type,
-          "Access-Control-Allow-Origin": "*",
           "x-amz-acl": "public-read",
         },
       };
